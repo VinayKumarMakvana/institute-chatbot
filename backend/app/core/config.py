@@ -5,15 +5,12 @@ class Settings(BaseSettings):
     BACKEND_URL: str = "http://localhost:8000"
     FRONTEND_URL: str = "http://localhost:5500"
     
-    MONGODB_URI: str = "mongodb://localhost:27017"
-    MONGODB_DATABASE: str = "chatbot_db"
-    
-    JWT_SECRET: str = "supersecretkey_change_in_production"
+    JWT_SECRET: str
     JWT_ALGORITHM: str = "HS256"
     JWT_EXPIRATION: int = 1440 # minutes
 
     ADMIN_EMAIL: str = "admin@example.com"
-    ADMIN_PASSWORD_HASH: str = "$2b$12$0DBi.NtEflRKEMqujyaVyekgsoDa57/49g2X/HRmKvmPoujclAaXK"
+    ADMIN_PASSWORD_HASH: str
 
     AI_PROVIDER: str = "mock"
     AI_API_KEY: str = ""

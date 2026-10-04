@@ -5,7 +5,7 @@ from app.main import app
 @pytest.fixture
 def mock_user_token():
     from app.core.security import create_access_token
-    return create_access_token({"sub": "507f1f77bcf86cd799439011", "role": "USER"})
+    return create_access_token({"sub": "1", "role": "USER"})
 
 @pytest.mark.asyncio
 async def test_chat_endpoint_unauthorized():

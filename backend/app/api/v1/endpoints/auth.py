@@ -57,8 +57,30 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
         data=user_resp
     )
 
+import time
+from fastapi import Request
+
+login_attempts = {}
+
+def get_login_rate_limit(request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    
+    # Cleanup stale entries to prevent memory leak
+    stale_ips = [ip for ip, times in login_attempts.items() if not any(t for t in times if now - t < 60)]
+    for ip in stale_ips:
+        del login_attempts[ip]
+        
+    attempts = [t for t in login_attempts.get(client_ip, []) if now - t < 60]
+    if len(attempts) >= 10:
+        raise HTTPException(status_code=429, detail="Too many login attempts. Please try again later.")
+    attempts.append(now)
+    login_attempts[client_ip] = attempts
+
 @router.post("/login", response_model=StandardResponse[dict])
-async def login(user_in: UserLogin, db: AsyncSession = Depends(get_db)):
+async def login(request: Request, user_in: UserLogin, db: AsyncSession = Depends(get_db)):
+    get_login_rate_limit(request)
+
     email = user_in.email.lower()
     
     if email == settings.ADMIN_EMAIL.lower() and verify_password(user_in.password, settings.ADMIN_PASSWORD_HASH):
@@ -113,7 +135,8 @@ async def login(user_in: UserLogin, db: AsyncSession = Depends(get_db)):
     )
 
 @router.post("/admin/login", response_model=StandardResponse[dict])
-async def admin_login(user_in: UserLogin):
+async def admin_login(request: Request, user_in: UserLogin):
+    get_login_rate_limit(request)
     email = user_in.email.lower()
     
     if email != settings.ADMIN_EMAIL.lower():

@@ -1,17 +1,17 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import text
 from app.models.response import StandardResponse
-from app.db.mongodb import db_client
+from app.db.sqlite import get_db
 
 router = APIRouter()
 
 @router.get("/", response_model=StandardResponse)
-async def health_check():
-    # Check db status
+async def health_check(db: AsyncSession = Depends(get_db)):
     db_status = "disconnected"
     try:
-        if db_client.client:
-            await db_client.client.admin.command('ping')
-            db_status = "connected"
+        await db.execute(text("SELECT 1"))
+        db_status = "connected"
     except Exception:
         db_status = "error"
         

@@ -130,6 +130,36 @@ async def delete_document(document_id: str, current_admin: UserResponse = Depend
     
     return StandardResponse(success=True, message="Document and associated data deleted.", data=None)
 
+from app.db.sqlite import AsyncSessionLocal
+
+@router.post("/rebuild-index", response_model=StandardResponse[str])
+async def rebuild_faiss_index(
+    background_tasks: BackgroundTasks,
+    current_admin: UserResponse = Depends(deps.require_admin)
+):
+    async def rebuild_task():
+        async with AsyncSessionLocal() as session:
+            # Recreate from all READY documents
+            result = await session.execute(select(DocumentDB).where(DocumentDB.status == "READY"))
+            docs = result.scalars().all()
+            
+            vector_store.index.reset()
+            vector_store.id_map.clear()
+            
+            for doc in docs:
+                chunk_res = await session.execute(select(DocumentChunkDB).where(DocumentChunkDB.document_id == doc.id))
+                chunks = chunk_res.scalars().all()
+                if chunks:
+                    texts = [c.text for c in chunks]
+                    ids = [c.id for c in chunks]
+                    metadatas = [{"document_id": c.document_id, "document_title": c.document_title, "page_number": c.page_number} for c in chunks]
+                    await vector_store.add_texts(texts, metadatas, ids)
+            
+            vector_store.save_local(settings.VECTOR_INDEX_PATH)
+
+    background_tasks.add_task(rebuild_task)
+    return StandardResponse(success=True, message="FAISS index rebuild started in the background.", data="Started")
+
 @router.post("/{document_id}/reprocess", response_model=StandardResponse[DocumentResponse])
 async def reprocess_document(
     document_id: str, 

@@ -8,7 +8,7 @@ import jwt
 from datetime import datetime, timedelta, timezone
 
 # We need a mock user token
-def create_mock_token(user_id="507f1f77bcf86cd799439011"):
+def create_mock_token(user_id="1"):
     from app.core.config import settings
     payload = {
         "sub": user_id,

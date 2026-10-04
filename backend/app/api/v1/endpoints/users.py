@@ -12,7 +12,7 @@ from app.db.models import UserDB
 router = APIRouter()
 
 @router.get("", response_model=StandardResponse[List[UserResponse]])
-async def list_users(current_user: UserResponse = Depends(deps.get_current_user), db: AsyncSession = Depends(get_db)):
+async def list_users(current_user: UserResponse = Depends(deps.require_admin), db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(UserDB).order_by(UserDB.created_at.desc()))
     users = result.scalars().all()
     

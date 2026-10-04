@@ -245,6 +245,6 @@ function escapeHtml(unsafe) {
 }
 
 async function loadChat(chatId) {
-    console.log("Loading chat", chatId);
+    
     // Real implementation would fetch chat details and populate UI
 }

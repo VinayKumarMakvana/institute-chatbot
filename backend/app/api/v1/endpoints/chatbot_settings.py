@@ -5,15 +5,16 @@ from sqlalchemy.future import select
 from app.db.sqlite import get_db
 from app.db.models import ChatbotSettingsDB
 from app.models.chatbot_settings import ChatbotSettingsUpdate, ChatbotSettingsResponse
-from app.api.v1.deps import get_current_user
+from app.api.v1.deps import require_admin
 from app.models.response import StandardResponse
+from app.models.user import UserResponse
 
 router = APIRouter()
 
 @router.get("/", response_model=StandardResponse)
 async def get_chatbot_settings(
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user) # Remove for testing UI temporarily
+    current_admin: UserResponse = Depends(require_admin)
 ):
     result = await db.execute(select(ChatbotSettingsDB).limit(1))
     settings = result.scalars().first()
@@ -30,7 +31,7 @@ async def get_chatbot_settings(
 async def update_chatbot_settings(
     settings_in: ChatbotSettingsUpdate,
     db: Session = Depends(get_db),
-    # current_user = Depends(get_current_user)
+    current_admin: UserResponse = Depends(require_admin)
 ):
     result = await db.execute(select(ChatbotSettingsDB).limit(1))
     settings = result.scalars().first()
