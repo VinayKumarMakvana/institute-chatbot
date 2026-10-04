@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    
+</head>
+<body class="dashboard-page">
+
+        <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="navbar-brand">
+            <i data-lucide="shield-alert" class="text-green"></i>
+            Institution <span class="text-green">AI Assistant</span>
+        </div>
+        
+        <div class="navbar-search">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
+                <i data-lucide="bell"></i>
+                <span class="badge" id="nav-badge-count">0</span>
+            </button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <div class="user-avatar" id="nav-avatar">A</div>
+                <div class="user-info">
+                    <span class="user-name" id="nav-name">Admin User</span>
+                    <span class="user-role" id="nav-role">Super Admin</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-body">
+        
+                <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="nav-item" id="nav-admin"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                <li><a href="admin_chatbot.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> Chatbot Management</a></li>
+                <li><a href="admin_documents.html" class="nav-item" id="nav-docs"><i data-lucide="file-text"></i> Document Management</a></li>
+                <li><a href="admin_live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="admin_users.html" class="nav-item" id="nav-users"><i data-lucide="users"></i> User Management</a></li>
+            </ul>
+            <div style="margin-top: auto;">
+                <div class="nav-divider"></div>
+                <ul class="nav-menu">
+                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        
+        <main class="main-content">
+            
+                <!-- View Profile Header -->
+    <div class="page-header" id="view-header">
+        <div class="page-header-left">
+            <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);"><i data-lucide="user"></i></div>
+            <div><h1>Admin Profile & Settings</h1><p>View and manage your administrator account information.</p></div>
+        </div>
+        <button class="btn-green" id="btn-edit-mode" style="display: flex; gap: 8px; align-items: center;"><i data-lucide="edit-2" style="width:16px; height:16px;"></i> Edit Profile</button>
+    </div>
+
+    <!-- Edit Profile Header -->
+    <div class="page-header" id="edit-header" style="display: none;">
+        <div class="page-header-left">
+            <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);"><i data-lucide="edit-3"></i></div>
+            <div><h1>Edit Admin Profile</h1><p>Update your personal, staff and account information.</p></div>
+        </div>
+        <button class="btn-outline-small" id="btn-view-mode" style="display: flex; gap: 8px; align-items: center;"><i data-lucide="arrow-left" style="width:16px; height:16px;"></i> Back to Profile</button>
+    </div>
+    
+    <div id="profile-container">
+        <!-- Content will be injected by admin_settings.js -->
+    </div>
+    </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/api.js"></script>
+    <script src="./js/admin_settings.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+        
+        // Mock Auth check just to show user names
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await requireAuth();
+            if(user) {
+                document.getElementById('nav-name').textContent = user.name;
+                const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                document.getElementById('nav-avatar').textContent = initials;
+                document.getElementById('nav-role').textContent = user.role;
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(path.includes('admin_users.html')) document.getElementById('nav-users')?.classList.add('active');
+            else if(path.includes('admin_documents.html')) document.getElementById('nav-docs')?.classList.add('active');
+            else if(path.includes('admin_chatbot.html')) document.getElementById('nav-chat')?.classList.add('active');
+            else if(path.includes('admin_live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
+            else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
+        });
+    </script>
+</body>
+</html>

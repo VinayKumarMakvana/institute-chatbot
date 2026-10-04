@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>User Management - Admin</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body class="dashboard-page">
+
+        <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="navbar-brand">
+            <i data-lucide="shield-alert" class="text-green"></i>
+            Institution <span class="text-green">AI Assistant</span>
+        </div>
+        
+        <div class="navbar-search">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
+                <i data-lucide="bell"></i>
+                <span class="badge" id="nav-badge-count">0</span>
+            </button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <div class="user-avatar" id="nav-avatar">A</div>
+                <div class="user-info">
+                    <span class="user-name" id="nav-name">Admin User</span>
+                    <span class="user-role" id="nav-role">Super Admin</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Main Layout -->
+    <div class="dashboard-body">
+        
+                <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="nav-item" id="nav-admin"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                <li><a href="admin_chatbot.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> Chatbot Management</a></li>
+                <li><a href="admin_documents.html" class="nav-item" id="nav-docs"><i data-lucide="file-text"></i> Document Management</a></li>
+                <li><a href="admin_live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="admin_users.html" class="nav-item" id="nav-users"><i data-lucide="users"></i> User Management</a></li>
+            </ul>
+            <div style="margin-top: auto;">
+                <div class="nav-divider"></div>
+                <ul class="nav-menu">
+                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Page Header -->
+            <div class="page-header" style="flex-direction: row; align-items: center; justify-content: space-between;">
+                <div class="page-header-left">
+                    <div class="page-header-icon" style="background: rgba(0, 210, 97, 0.1); color: #00D261;">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div>
+                        <h1>User Management</h1>
+                        <p style="color: #9ca3af; font-size: 0.85rem; margin-top: 4px;">Manage students, faculty, and admins. View, edit, activate, deactivate and manage user permissions.</p>
+                    </div>
+                </div>
+                <button class="btn-outline-small" onclick="alert('Import feature coming soon!')">
+                    <i data-lucide="download" style="width:14px; height:14px;"></i> Import Users
+                </button>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 20px;">
+                <!-- Card 1 -->
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                    <div style="background: #2563eb; color: #fff; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="users" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 2px;">Total Users</span>
+                        <span id="kpi-total" style="font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1;">1,284</span>
+                        <span style="font-size: 0.7rem; color: #10b981; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                            <i data-lucide="arrow-up-right" style="width: 12px; height: 12px;"></i> +18% this month
+                        </span>
+                    </div>
+                </div>
+                
+                <!-- Card 2 -->
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                    <div style="background: #10b981; color: #fff; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="graduation-cap" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 2px;">Students</span>
+                        <span id="kpi-students" style="font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1;">1,012</span>
+                        <span style="font-size: 0.7rem; color: #10b981; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                            <i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> 78.8%
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                    <div style="background: #8b5cf6; color: #fff; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="graduation-cap" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 2px;">Faculty</span>
+                        <span id="kpi-faculty" style="font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1;">186</span>
+                        <span style="font-size: 0.7rem; color: #8b5cf6; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                            <i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> 14.5%
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                    <div style="background: #f59e0b; color: #fff; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="shield" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 2px;">Admins</span>
+                        <span id="kpi-admins" style="font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1;">24</span>
+                        <span style="font-size: 0.7rem; color: #f59e0b; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                            <i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> 1.9%
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; flex-direction: row; align-items: center; gap: 16px;">
+                    <div style="background: #ef4444; color: #fff; width: 56px; height: 56px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i data-lucide="ban" style="width: 28px; height: 28px;"></i>
+                    </div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af; margin-bottom: 2px;">Inactive Users</span>
+                        <span id="kpi-inactive" style="font-size: 1.5rem; font-weight: 700; color: #fff; line-height: 1;">62</span>
+                        <span style="font-size: 0.7rem; color: #ef4444; margin-top: 6px; display: flex; align-items: center; gap: 4px; font-weight: 600;">
+                            <i data-lucide="arrow-down-right" style="width: 12px; height: 12px;"></i> 4.8%
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="user-search" placeholder="Search users..." onkeyup="filterUsers()">
+                </div>
+                
+                <select class="filter-select" id="role-filter" onchange="filterUsers()" >
+                    <option value="all">All Roles</option>
+                    <option value="USER">Student</option>
+                    <option value="FACULTY">Faculty</option>
+                    <option value="ADMIN">Admin</option>
+                </select>
+                
+                <select class="filter-select" id="status-filter" onchange="filterUsers()" >
+                    <option value="all">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Pending">Pending</option>
+                </select>
+                
+                <select class="filter-select" >
+                    <option value="all">All Departments</option>
+                    <option value="B.Tech CSE">B.Tech CSE</option>
+                    <option value="B.Tech IT">B.Tech IT</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                </select>
+                
+                <select class="filter-select" >
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+                
+                <button class="action-btn-icon" onclick="fetchUsers()">
+                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
+                </button>
+            </div>
+
+            <!-- Content Table -->
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" style="accent-color: #00D261;"></th>
+                            <th style="width: 40px;">#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Last Active</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+                
+                <!-- Pagination -->
+                <div class="pagination">
+                    <div>Showing <span id="pag-end">0</span> of <span id="pag-total">0</span> users</div>
+                    <div style="display: flex; gap: 4px;">
+                        <!-- Pagination buttons removed until backend supports it -->
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/api.js"></script>
+    <script src="./js/admin_users.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(path.includes('admin_users.html')) document.getElementById('nav-users')?.classList.add('active');
+            else if(path.includes('admin_documents.html')) document.getElementById('nav-docs')?.classList.add('active');
+            else if(path.includes('admin_chatbot.html')) document.getElementById('nav-chat')?.classList.add('active');
+            else if(path.includes('admin_live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
+            else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
+        });
+    </script>
+</body>
+</html>

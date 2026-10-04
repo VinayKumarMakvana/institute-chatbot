@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Admin Dashboard</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    
+</head>
+<body class="dashboard-page">
+
+        <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="navbar-brand">
+            <i data-lucide="shield-alert" class="text-green"></i>
+            Institution <span class="text-green">AI Assistant</span>
+        </div>
+        
+        <div class="navbar-search">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
+                <i data-lucide="bell"></i>
+                <span class="badge" id="nav-badge-count">0</span>
+            </button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <div class="user-avatar" id="nav-avatar">A</div>
+                <div class="user-info">
+                    <span class="user-name" id="nav-name">Admin User</span>
+                    <span class="user-role" id="nav-role">Super Admin</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-body">
+        
+                <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="nav-item" id="nav-admin"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                <li><a href="admin_chatbot.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> Chatbot Management</a></li>
+                <li><a href="admin_documents.html" class="nav-item" id="nav-docs"><i data-lucide="file-text"></i> Document Management</a></li>
+                <li><a href="admin_live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="admin_users.html" class="nav-item" id="nav-users"><i data-lucide="users"></i> User Management</a></li>
+            </ul>
+            <div style="margin-top: auto;">
+                <div class="nav-divider"></div>
+                <ul class="nav-menu">
+                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        
+        <main class="main-content">
+            
+            <!-- Page Header -->
+            <div class="page-header" style="flex-direction: row; align-items: center; justify-content: space-between;">
+                <div class="page-header-left">
+                    <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);">
+                        <i data-lucide="gauge"></i>
+                    </div>
+                    <div>
+                        <h1>Admin Dashboard</h1>
+                        <p style="color: #9ca3af; font-size: 0.85rem; margin-top: 4px;">Manage your institution's AI assistant platform</p>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 8px;">
+                        <i data-lucide="calendar" style="color: #9ca3af; width: 20px; height: 20px;"></i>
+                        <div>
+                            <div style="color: #fff; font-size: 0.85rem; font-weight: 500;">3 Oct 2026, 07:35 PM</div>
+                            <div style="color: #9ca3af; font-size: 0.75rem;">Saturday</div>
+                        </div>
+                    </div>
+                    <button class="btn-primary" style="width: auto;">
+                        View Live Site <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- KPI Cards -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px;">
+                <!-- Total Users -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #3b82f6; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="users"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">Total Users</span>
+                        <span id="kpi-users" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +12% this month</span>
+                    </div>
+                </div>
+                <!-- Total Queries -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #10b981; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="message-square"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">Total Queries</span>
+                        <span id="kpi-queries" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +18% this month</span>
+                    </div>
+                </div>
+                <!-- Total PDFs -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #8b5cf6; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="file-text"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">Total PDFs</span>
+                        <span id="kpi-pdfs" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +5% this month</span>
+                    </div>
+                </div>
+                <!-- Saved Answers -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #f59e0b; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="bookmark"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">Saved Answers</span>
+                        <span id="kpi-answers" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +22% this month</span>
+                    </div>
+                </div>
+                <!-- Support Requests -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #ef4444; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="headphones"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">Support Requests</span>
+                        <span id="kpi-support" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #ef4444; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-down-right" style="width:10px; height:10px;"></i> -8% (12 pending)</span>
+                    </div>
+                </div>
+                <!-- System Uptime -->
+                <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
+                    <div style="background: #06b6d4; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="bar-chart"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.7rem; color: #9ca3af;">System Uptime</span>
+                        <span id="kpi-uptime" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
+                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 4px; margin-top:2px;"><div style="width:6px; height:6px; border-radius:50%; background:#10b981;"></div> Online</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics & Categories -->
+            <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 16px; margin-bottom: 24px;">
+                <!-- Chart -->
+                <div class="panel-card" style="position: relative;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div class="panel-title" style="margin: 0;">Query Analytics</div>
+                        <div style="display: flex; gap: 8px;">
+                            <select class="filter-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;">
+                                <option>Last 30 Days</option>
+                            </select>
+                            <select class="filter-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;">
+                                <option>All Categories</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-between; position: relative;">
+                        <!-- Custom CSS graph for now -->
+                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">500</span></div>
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">400</span></div>
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">300</span></div>
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">200</span></div>
+                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">100</span></div>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.1); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">0</span></div>
+                        </div>
+                        <svg width="100%" height="180" viewBox="0 0 1000 180" preserveAspectRatio="none" style="z-index:10; overflow:visible; margin-left: 30px;">
+                            <defs>
+                                <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%" stop-color="rgba(0, 210, 97, 0.4)"/>
+                                    <stop offset="100%" stop-color="rgba(0, 210, 97, 0.0)"/>
+                                </linearGradient>
+                            </defs>
+                            <path d="M 0 120 Q 50 140, 100 100 T 200 90 T 300 70 T 400 110 T 500 70 T 600 40 T 700 80 T 800 50 T 900 20 T 1000 60 L 1000 180 L 0 180 Z" fill="url(#lineGrad)"/>
+                            <path d="M 0 120 Q 50 140, 100 100 T 200 90 T 300 70 T 400 110 T 500 70 T 600 40 T 700 80 T 800 50 T 900 20 T 1000 60" fill="none" stroke="#00D261" stroke-width="2"/>
+                            <circle cx="600" cy="40" r="4" fill="#000" stroke="#00D261" stroke-width="2"/>
+                        </svg>
+                        
+                        <!-- Tooltip -->
+                        <div style="position: absolute; left: 52%; top: 15%; transform: translateX(-50%); background: rgba(0,0,0,0.8); border: 1px solid rgba(0,210,97,0.3); padding: 6px 10px; border-radius: 6px; z-index: 20; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                            <span style="font-size: 0.65rem; color: #9ca3af;">25 Sep 2026</span>
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">412 <span style="font-weight:400;">queries</span></span>
+                        </div>
+                        
+                        <div style="position: absolute; bottom: -20px; left: 30px; width: calc(100% - 30px); display: flex; justify-content: space-between; font-size: 0.65rem; color: #9ca3af;">
+                            <span>3 Sep</span><span>7 Sep</span><span>11 Sep</span><span>15 Sep</span><span>19 Sep</span><span>23 Sep</span><span>27 Sep</span><span>1 Oct</span><span>3 Oct</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Categories -->
+                <div class="panel-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div class="panel-title" style="margin: 0;">Top Query Categories</div>
+                        <a href="#" style="font-size: 0.75rem; color: #9ca3af; text-decoration: none;">View All</a>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #3b82f6; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="book" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Syllabus & Academics</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #3b82f6; width: 27%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">3,421</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">27%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #10b981; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="edit-3" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Examination</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #10b981; width: 23%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">2,856</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">23%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #8b5cf6; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="user-plus" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Admission & Registration</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #8b5cf6; width: 15%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">1,932</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">15%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #f59e0b; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="file-check" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Results & Evaluation</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #f59e0b; width: 10%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">1,264</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">10%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #ef4444; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="credit-card" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Fee & Scholarship</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #ef4444; width: 8%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">987</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">8%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #06b6d4; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="library" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Library & Resources</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #06b6d4; width: 6%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">721</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">6%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #eab308; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="home" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hostel & Facilities</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #eab308; width: 5%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">642</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">5%</div>
+                        </div>
+                        
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: #6b7280; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="more-horizontal" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Other</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: #6b7280; width: 6%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">720</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">6%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Recent Activity Section -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+                <!-- Recent Users -->
+                <div class="panel-card" id="recent-users-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div class="panel-title" style="margin: 0;">Recent Users</div>
+                        <a href="admin_users.html" style="font-size: 0.75rem; color: #9ca3af; text-decoration: none;">View All</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;" id="recent-users-container">
+                        <!-- Populated by JS -->
+                        <div style="text-align: center; color: #9ca3af; font-size: 0.8rem; padding: 20px 0;">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Recent Queries -->
+                <div class="panel-card" id="recent-queries-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div class="panel-title" style="margin: 0;">Recent Queries</div>
+                        <a href="admin_chatbot.html" style="font-size: 0.75rem; color: #9ca3af; text-decoration: none;">View All</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;" id="recent-queries-container">
+                        <!-- Populated by JS -->
+                        <div style="text-align: center; color: #9ca3af; font-size: 0.8rem; padding: 20px 0;">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Recent PDF Uploads -->
+                <div class="panel-card" id="recent-pdfs-panel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <div class="panel-title" style="margin: 0;">Recent PDF Uploads</div>
+                        <a href="admin_documents.html" style="font-size: 0.75rem; color: #9ca3af; text-decoration: none;">View All</a>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 14px;" id="recent-pdfs-container">
+                        <!-- Populated by JS -->
+                        <div style="text-align: center; color: #9ca3af; font-size: 0.8rem; padding: 20px 0;">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section (System Status & Quick Actions) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <!-- System Status -->
+                <div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                        <h3 style="font-size: 1rem; color: #fff; margin: 0;">System Status</h3>
+                        <button class="btn-secondary" style="height: 30px; font-size: 0.75rem; padding: 0 10px; border:none;">View Details</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px;">
+                            <span style="font-size: 0.75rem; color: #d1d5db; display: flex; align-items: center; gap: 6px;"><div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div> Chatbot Service</span>
+                            <span style="font-size: 0.7rem; color: #10b981;">Operational</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px;">
+                            <span style="font-size: 0.75rem; color: #d1d5db; display: flex; align-items: center; gap: 6px;"><div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div> Database</span>
+                            <span style="font-size: 0.7rem; color: #10b981;">Operational</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px;">
+                            <span style="font-size: 0.75rem; color: #d1d5db; display: flex; align-items: center; gap: 6px;"><div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div> PDF Processing</span>
+                            <span style="font-size: 0.7rem; color: #10b981;">Operational</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px;">
+                            <span style="font-size: 0.75rem; color: #d1d5db; display: flex; align-items: center; gap: 6px;"><div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div> API Services</span>
+                            <span style="font-size: 0.7rem; color: #10b981;">Operational</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div>
+                    <h3 style="font-size: 1rem; color: #fff; margin: 0 0 12px 0;">Quick Actions</h3>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <button style="background: rgba(37, 99, 235, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="file-text" style="width:14px; height:14px;"></i> Upload PDF</button>
+                        <button style="background: rgba(16, 185, 129, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> Manage Content</button>
+                        <button style="background: rgba(139, 92, 246, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i> View Analytics</button>
+                        <button style="background: rgba(245, 158, 11, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="users" style="width:14px; height:14px;"></i> Manage Users</button>
+                        
+                        <button style="background: rgba(225, 29, 72, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> System Settings</button>
+                        <button style="background: rgba(6, 182, 212, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="megaphone" style="width:14px; height:14px;"></i> Send Announcement</button>
+                        <button style="background: rgba(234, 179, 8, 0.9); border: none; color: #000; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="database" style="width:14px; height:14px;"></i> Backup Data</button>
+                        <button style="background: rgba(107, 114, 128, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Clear Cache</button>
+                    </div>
+                </div>
+            </div>
+    
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="./js/api.js"></script>
+    <script src="./js/admin_dashboard.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+        
+        // Mock Auth check just to show user names
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await requireAuth();
+            if(user) {
+                document.getElementById('nav-name').textContent = user.name;
+                const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
+                document.getElementById('nav-avatar').textContent = initials;
+                document.getElementById('nav-role').textContent = user.role;
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(path.includes('admin_users.html')) document.getElementById('nav-users')?.classList.add('active');
+            else if(path.includes('admin_documents.html')) document.getElementById('nav-docs')?.classList.add('active');
+            else if(path.includes('admin_chatbot.html')) document.getElementById('nav-chat')?.classList.add('active');
+            else if(path.includes('admin_live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
+            else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Document Management</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    
+    <style>
+        /* Upload Area */
+        .upload-area {
+            border: 1px dashed rgba(255,255,255,0.2);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            background: rgba(255,255,255,0.01);
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #00D261;
+            background: rgba(0, 210, 97, 0.05);
+        }
+        .upload-icon {
+            color: #9ca3af;
+            margin-bottom: 12px;
+        }
+        
+        /* Bulk Actions */
+        .bulk-btn {
+            width: 100%;
+            padding: 10px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            cursor: pointer;
+            border: none;
+        }
+        .bulk-process {
+            background: rgba(0, 210, 97, 0.15);
+            color: #00D261;
+            border: 1px solid rgba(0, 210, 97, 0.3);
+        }
+        .bulk-move {
+            background: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .bulk-delete {
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        /* Queue Item */
+        .queue-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .queue-file-icon {
+            background: rgba(255,255,255,0.1);
+            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: #fff;
+        }
+        .queue-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .queue-name {
+            font-size: 0.8rem;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 6px;
+        }
+        .progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #00D261;
+        }
+        .queue-status {
+            font-size: 0.75rem;
+            color: #00D261;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+
+        <!-- Top Navbar -->
+    <nav class="top-navbar">
+        <div class="navbar-brand">
+            <i data-lucide="shield-alert" class="text-green"></i>
+            Institution <span class="text-green">AI Assistant</span>
+        </div>
+        
+        <div class="navbar-search">
+            <i data-lucide="search" class="search-icon"></i>
+            <input type="text" placeholder="Search...">
+        </div>
+        
+        <div class="navbar-actions">
+            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
+                <i data-lucide="bell"></i>
+                <span class="badge" id="nav-badge-count">0</span>
+            </button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <div class="user-avatar" id="nav-avatar">A</div>
+                <div class="user-info">
+                    <span class="user-name" id="nav-name">Admin User</span>
+                    <span class="user-role" id="nav-role">Super Admin</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="dashboard-body">
+        
+                <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="admin.html" class="nav-item" id="nav-admin"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+                <li><a href="admin_chatbot.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> Chatbot Management</a></li>
+                <li><a href="admin_documents.html" class="nav-item" id="nav-docs"><i data-lucide="file-text"></i> Document Management</a></li>
+                <li><a href="admin_live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="admin_users.html" class="nav-item" id="nav-users"><i data-lucide="users"></i> User Management</a></li>
+            </ul>
+            <div style="margin-top: auto;">
+                <div class="nav-divider"></div>
+                <ul class="nav-menu">
+                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <div class="page-header" style="flex-direction: row; align-items: center; justify-content: space-between;">
+                <div class="page-header-left">
+                    <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <div>
+                        <h1>Document Management</h1>
+                        <p style="color: #9ca3af; font-size: 0.85rem; margin-top: 4px;">Upload, manage and process PDF documents for the AI knowledge base.</p>
+                    </div>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); padding: 12px 16px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 12px;">
+                    <i data-lucide="calendar" style="color:#9ca3af; width:24px; height:24px;"></i>
+                    <div>
+                        <div style="font-size:0.75rem; color:#9ca3af;">Knowledge Base Status</div>
+                        <div style="font-size:0.85rem; color:#00D261; display:flex; align-items:center; gap:6px;">
+                            <div style="width:6px; height:6px; border-radius:50%; background:#00D261;"></div>
+                            Active (<span id="kb-active-count">0</span> documents)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- KPI Cards -->
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 24px;">
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div style="background: #3b82f6; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="book-open"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af;">Total Documents</span>
+                        <span id="kpi-total" style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div style="background: #10b981; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="check-circle"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af;">Processed</span>
+                        <span id="kpi-processed" style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div style="background: #f59e0b; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="clock"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af;">Processing</span>
+                        <span id="kpi-processing" style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div style="background: #ef4444; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="x-circle"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af;">Failed</span>
+                        <span id="kpi-failed" style="font-size: 1.5rem; font-weight: 700; color: #fff;">0</span>
+                    </div>
+                </div>
+                <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
+                    <div style="background: #8b5cf6; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="database"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span style="font-size: 0.75rem; color: #9ca3af;">Total Size</span>
+                        <span id="kpi-size" style="font-size: 1.5rem; font-weight: 700; color: #fff;">0 MB</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Section Grid -->
+            <div class="grid-3-col">
+                <!-- Upload Form -->
+                <div class="panel-card">
+                    <div class="panel-title">Upload New Document</div>
+                    
+                    <form id="upload-form" style="display:none;">
+                        <input type="file" id="file-input" accept="application/pdf">
+                    </form>
+
+                    <div class="upload-area" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                        <i data-lucide="cloud-upload" class="upload-icon" style="width:48px; height:48px; margin: 0 auto 12px;"></i>
+                        <div style="color: #fff; font-weight: 500; font-size: 1rem; margin-bottom: 4px;">Drag & drop PDF files here</div>
+                        <div style="color: #00D261; font-size: 0.85rem; margin-bottom: 16px;">or click to browse files</div>
+                        <div style="color: #6b7280; font-size: 0.75rem; margin-bottom: 20px;">Only PDF files are allowed. Max size per file: 50 MB.</div>
+                        <button class="btn-primary" style="width: auto; margin: 0 auto; display: inline-flex; background:#00D261; color:#041209;">
+                            <i data-lucide="file-plus" style="width:16px; height:16px;"></i> Choose Files
+                        </button>
+                    </div>
+
+                    <!-- Selected file info to show before upload -->
+                    <div id="selected-file-info" style="display:none; margin-top: 16px; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <i data-lucide="file-text" style="color:#ef4444;"></i>
+                                <span id="sel-file-name" style="color:#fff; font-size:0.85rem;">filename.pdf</span>
+                            </div>
+                            <i data-lucide="x" style="color:#9ca3af; cursor:pointer; width:16px; height:16px;" onclick="clearFile()"></i>
+                        </div>
+                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 12px;">
+                            <select id="sel-file-cat" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:#fff; padding:6px; border-radius:4px; font-size:0.8rem;">
+                                <option value="">Select Category...</option>
+                                <option value="Syllabus">Syllabus</option>
+                                <option value="Study Material">Study Material</option>
+                                <option value="Notes">Notes</option>
+                                <option value="Question Paper">Question Paper</option>
+                                <option value="Lab Manual">Lab Manual</option>
+                            </select>
+                            <select id="sel-file-sem" style="background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1); color:#fff; padding:6px; border-radius:4px; font-size:0.8rem;">
+                                <option value="">Select Semester...</option>
+                                <option value="1st">1st</option>
+                                <option value="2nd">2nd</option>
+                                <option value="3rd">3rd</option>
+                                <option value="4th">4th</option>
+                                <option value="All">All</option>
+                            </select>
+                        </div>
+                        <button class="btn-primary" style="width:100%; padding:8px;" onclick="uploadFile()">Upload & Process</button>
+                    </div>
+                </div>
+                
+                <!-- Bulk Actions -->
+                <div class="panel-card">
+                    <div class="panel-title">Bulk Actions</div>
+                    <button class="bulk-btn bulk-process">
+                        <i data-lucide="settings" style="width:16px; height:16px;"></i> Process Selected
+                    </button>
+                    <button class="bulk-btn bulk-move">
+                        <i data-lucide="folder-output" style="width:16px; height:16px;"></i> Move to Category
+                    </button>
+                    <button class="bulk-btn bulk-delete" onclick="deleteSelected()">
+                        <i data-lucide="trash-2" style="width:16px; height:16px;"></i> Delete Selected
+                    </button>
+                </div>
+                
+                <!-- Processing Queue -->
+                <div class="panel-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                        <div class="panel-title" style="margin:0;">Processing Queue</div>
+                        <a href="#" style="color:#9ca3af; font-size:0.75rem; text-decoration:none;">View All</a>
+                    </div>
+                    
+                    <div id="processing-queue-container">
+                        <div style="color:#9ca3af; font-size:0.8rem; text-align:center; margin-top:30px;">No documents in queue</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Section -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <div class="filters-bar no-bg">
+                    <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" id="search-input" placeholder="Search documents..." onkeyup="filterTable()">
+                </div>
+                    
+                    <select class="filter-select" id="filter-category" onchange="filterTable()" >
+                        <option value="all">All Categories</option>
+                        <option value="Syllabus">Syllabus</option>
+                        <option value="Study Material">Study Material</option>
+                        <option value="Notes">Notes</option>
+                        <option value="Question Paper">Question Paper</option>
+                        <option value="Lab Manual">Lab Manual</option>
+                        <option value="Guidelines">Guidelines</option>
+                        <option value="Academic">Academic</option>
+                        <option value="Admission">Admission</option>
+                        <option value="Facilities">Facilities</option>
+                    </select>
+                    
+                    <select class="filter-select" id="filter-status" onchange="filterTable()" >
+                        <option value="all">All Status</option>
+                        <option value="READY">Processed</option>
+                        <option value="PROCESSING">Processing</option>
+                        <option value="FAILED">Failed</option>
+                    </select>
+
+                    <select class="filter-select" id="filter-semester" onchange="filterTable()" >
+                        <option value="all">All Semesters</option>
+                        <option value="1st">1st</option>
+                        <option value="2nd">2nd</option>
+                        <option value="3rd">3rd</option>
+                        <option value="4th">4th</option>
+                        <option value="All">All</option>
+                    </select>
+                </div>
+
+                <div style="display:flex; gap:10px;">
+                    <select class="filter-select" >
+                        <option>Newest First</option>
+                    </select>
+                    <button class="action-btn-icon" onclick="fetchDocuments()"><i data-lucide="refresh-cw" style="width:16px; height:16px;"></i></button>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 40px;"><input type="checkbox" id="select-all-cb" style="accent-color: #00D261;"></th>
+                            <th style="width: 40px;">#</th>
+                            <th>Document Name</th>
+                            <th>Category</th>
+                            <th>Semester</th>
+                            <th>Size</th>
+                            <th>Status</th>
+                            <th>Uploaded On</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="documents-table-body">
+                        <!-- Populated by JS -->
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <div>Showing 1 to <span id="pag-end">0</span> of <span id="pag-total">0</span> documents</div>
+                    <div style="display: flex; gap: 4px;">
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script src="./js/admin_documents.js"></script>
+    <script>
+        lucide.createIcons();
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            } else {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const path = window.location.pathname;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            if(path.includes('admin_users.html')) document.getElementById('nav-users')?.classList.add('active');
+            else if(path.includes('admin_documents.html')) document.getElementById('nav-docs')?.classList.add('active');
+            else if(path.includes('admin_chatbot.html')) document.getElementById('nav-chat')?.classList.add('active');
+            else if(path.includes('admin_live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
+            else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
+        });
+    </script>
+</body>
+</html>

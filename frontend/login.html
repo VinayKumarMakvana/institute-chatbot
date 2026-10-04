@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login - Institution AI Assistant</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/auth.css">
+</head>
+<body class="auth-page">
+    <div class="page-background"></div>
+
+    <div class="split-layout" style="height: 100vh; overflow: hidden; padding: 2rem;">
+        
+        <!-- Left Panel: Product Information -->
+        <div class="left-panel" style="padding-top: 1rem;">
+            <div class="logo" style="margin-bottom: 2rem;">
+                <i data-lucide="graduation-cap" size="24" style="color: #00D261; fill: rgba(0,210,97,0.2);"></i>
+                <div class="logo-text" style="font-size: 1rem; font-weight: 700; color: #fff;">
+                    Institution <span class="text-green">AI Assistant</span>
+                </div>
+            </div>
+
+            <div class="content" style="margin-top: auto; margin-bottom: auto;">
+                <div class="badge" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); margin-bottom: 1rem; padding: 4px 12px; display: inline-flex; align-items: center; gap: 8px;">
+                    <span class="dot"></span> <span style="color:#e5e7eb; font-size:0.7rem;">Multilingual</span>
+                    <span style="color: #4b5563;">•</span> <span style="color:#e5e7eb; font-size:0.7rem;">Document-Based</span>
+                    <span style="color: #4b5563;">•</span> <span style="color:#e5e7eb; font-size:0.7rem;">AI Powered</span>
+                </div>
+                
+                <h1 style="font-size: 2.5rem; line-height: 1.1; margin-bottom: 0.8rem;">Language Agnostic<br><span class="text-green">Chatbot</span></h1>
+                
+                <p class="subtitle" style="font-size: 0.9rem; max-width: 480px; line-height: 1.5; margin-bottom: 1.5rem; color: #9ca3af;">
+                    A multilingual, document-based conversational information retrieval system for educational institutions.
+                </p>
+
+                <ul class="features" style="gap: 1rem;">
+                    <li style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div class="icon-box" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0, 210, 97, 0.15); border: 1px solid rgba(0, 210, 97, 0.3); display: flex; align-items: center; justify-content: center;"><i data-lucide="file-text" size="18" style="color:#00D261;"></i></div>
+                        <div class="feature-text" style="display: flex; flex-direction: column; justify-content: center; height: 36px;">
+                            <strong style="font-size: 0.9rem; color: #fff; margin-bottom: 2px;">Upload & Manage PDFs</strong>
+                            <span style="font-size: 0.75rem; color: #9ca3af;">Add notices, circulars, schedules and more</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div class="icon-box" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0, 210, 97, 0.15); border: 1px solid rgba(0, 210, 97, 0.3); display: flex; align-items: center; justify-content: center;"><i data-lucide="book-open" size="18" style="color:#00D261;"></i></div>
+                        <div class="feature-text" style="display: flex; flex-direction: column; justify-content: center; height: 36px;">
+                            <strong style="font-size: 0.9rem; color: #fff; margin-bottom: 2px;">AI-Powered Information Retrieval</strong>
+                            <span style="font-size: 0.75rem; color: #9ca3af;">Find accurate answers from your documents</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div class="icon-box" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0, 210, 97, 0.15); border: 1px solid rgba(0, 210, 97, 0.3); display: flex; align-items: center; justify-content: center;"><i data-lucide="languages" size="18" style="color:#00D261;"></i></div>
+                        <div class="feature-text" style="display: flex; flex-direction: column; justify-content: center; height: 36px;">
+                            <strong style="font-size: 0.9rem; color: #fff; margin-bottom: 2px;">Multilingual Support</strong>
+                            <span style="font-size: 0.75rem; color: #9ca3af;">Answer queries in multiple languages</span>
+                        </div>
+                    </li>
+                    <li style="display: flex; align-items: flex-start; gap: 12px;">
+                        <div class="icon-box" style="width: 36px; height: 36px; border-radius: 8px; background: rgba(0, 210, 97, 0.15); border: 1px solid rgba(0, 210, 97, 0.3); display: flex; align-items: center; justify-content: center;"><i data-lucide="shield-check" size="18" style="color:#00D261;"></i></div>
+                        <div class="feature-text" style="display: flex; flex-direction: column; justify-content: center; height: 36px;">
+                            <strong style="font-size: 0.9rem; color: #fff; margin-bottom: 2px;">Secure Admin Panel</strong>
+                            <span style="font-size: 0.75rem; color: #9ca3af;">Manage content with ease</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="footer" style="margin-top: auto; display: flex; align-items: center; gap: 12px;">
+                <div class="line" style="width: 30px; height: 2px; background: #00D261;"></div>
+                <span style="font-size: 0.75rem; color: #6b7280; letter-spacing: 0.5px;">Making Educational Information Accessible for Everyone</span>
+            </div>
+        </div>
+
+        <!-- Right Panel: Login Form -->
+        <div class="right-panel" style="display: flex; align-items: center; justify-content: center;">
+            <div class="auth-card" style="width: 100%; max-width: 400px; padding: 2rem 2rem; background: linear-gradient(180deg, rgba(0, 210, 97, 0.08) 0%, rgba(4, 18, 9, 0.98) 40%); border: 1px solid rgba(0, 210, 97, 0.35); box-shadow: 0 0 60px rgba(0, 210, 97, 0.15), inset 0 0 30px rgba(0, 210, 97, 0.05);">
+                
+                <div class="card-header" style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 24px;">
+                    <div style="width: 56px; height: 56px; border-radius: 14px; background: rgba(0, 210, 97, 0.15); border: 1px solid rgba(0, 210, 97, 0.4); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; box-shadow: 0 0 25px rgba(0,210,97,0.2);">
+                        <i data-lucide="graduation-cap" size="28" style="color: #00D261; fill: rgba(0,210,97,0.2);"></i>
+                    </div>
+                    <h2 style="color: #fff; font-size: 1.5rem; font-weight: 700; margin-bottom: 6px;">Login</h2>
+                    <p class="auth-subtitle" style="color: #9ca3af; font-size: 0.85rem;">Sign in to access documents and chatbot</p>
+                </div>
+
+                <form id="login-form">
+                    <div class="input-container" style="margin-bottom: 16px;">
+                        <div class="input-group">
+                            <i data-lucide="user" class="input-icon" size="18"></i>
+                            <input type="text" id="login-email" placeholder="Username or Email" required style="height: 42px; border-radius: 8px; padding-left: 40px; font-size: 0.9rem;">
+                        </div>
+                    </div>
+
+                    <div class="input-container" style="margin-bottom: 20px;">
+                        <div class="input-group has-action">
+                            <i data-lucide="lock" class="input-icon" size="18"></i>
+                            <input type="password" id="login-password" placeholder="Password" required style="height: 42px; border-radius: 8px; padding-left: 40px; font-size: 0.9rem;">
+                            <i data-lucide="eye-off" class="toggle-password" size="18" onclick="togglePasswordVisibility('login-password', this)"></i>
+                        </div>
+                    </div>
+
+                    <div class="label-row" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <label class="checkbox-container" style="display: flex; align-items: center; gap: 8px; color: #fff; cursor: pointer; position: relative; padding-left: 24px; font-size: 0.8rem;">
+                            <input type="checkbox" id="remember-me" style="position: absolute; opacity: 0; cursor: pointer; height: 0; width: 0;" />
+                            <span class="checkmark" style="position: absolute; top: 50%; left: 0; transform: translateY(-50%); height: 16px; width: 16px; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px;"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="link" style="color: #00D261; font-size: 0.8rem; text-decoration: none;">Forgot Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="login-submit-btn" style="height: 42px; border-radius: 8px; font-size: 0.95rem; margin-bottom: 20px;">
+                        Login <i data-lucide="arrow-right" size="16"></i>
+                    </button>
+
+                    <p id="auth-error" class="error-text" style="text-align: center; margin-top: -10px; margin-bottom: 10px; display: none;"></p>
+
+                    <div class="divider" style="margin-bottom: 12px;">
+                        <span style="font-size: 0.75rem;">OR</span>
+                    </div>
+                    
+                    <div class="signup-prompt" style="text-align: center; color: #9ca3af; font-size: 0.8rem;">
+                        Don't have an account? <a href="register.html" class="link" style="color: #00D261; text-decoration: none;">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        lucide.createIcons();
+        function togglePasswordVisibility(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                iconElement.setAttribute('data-lucide', 'eye');
+            } else {
+                input.type = 'password';
+                iconElement.setAttribute('data-lucide', 'eye-off');
+            }
+            lucide.createIcons();
+        }
+        
+        // Add style for checked checkbox
+        document.head.insertAdjacentHTML("beforeend", `<style>
+            .checkbox-container input:checked ~ .checkmark { background-color: #00D261; border-color: #00D261; }
+            .checkbox-container .checkmark:after { content: ""; position: absolute; display: none; left: 5px; top: 2px; width: 4px; height: 8px; border: solid black; border-width: 0 2px 2px 0; transform: rotate(45deg); }
+            .checkbox-container input:checked ~ .checkmark:after { display: block; }
+            .input-group .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
+            .input-group .toggle-password { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; cursor: pointer; }
+        </style>`);
+    </script>
+    <script src="./js/api.js"></script>
+    <script src="./js/auth.js"></script>
+</body>
+</html>
