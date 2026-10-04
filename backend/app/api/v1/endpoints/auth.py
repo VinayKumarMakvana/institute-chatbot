@@ -61,7 +61,7 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
 async def login(user_in: UserLogin, db: AsyncSession = Depends(get_db)):
     email = user_in.email.lower()
     
-    if email == settings.ADMIN_EMAIL.lower() or (email == settings.ADMIN_EMAIL.lower() and verify_password(user_in.password, settings.ADMIN_PASSWORD_HASH)):
+    if email == settings.ADMIN_EMAIL.lower() and verify_password(user_in.password, settings.ADMIN_PASSWORD_HASH):
         now = utc_now()
         access_token = create_access_token(data={"sub": settings.ADMIN_EMAIL, "role": "ADMIN"})
         admin_resp = UserResponse(

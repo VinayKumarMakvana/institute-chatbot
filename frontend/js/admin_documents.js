@@ -6,11 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentUser = await requireAuth();
     if(!currentUser) return;
 
-    const nameSplit = currentUser.name.split(' ');
-    document.getElementById('nav-avatar').textContent = nameSplit[0][0] + (nameSplit[1] ? nameSplit[1][0] : '');
-    document.getElementById('nav-name').textContent = currentUser.name;
-    document.getElementById('nav-role').textContent = 'Super Admin';
-
     // Drag and Drop Logic
     const dropZone = document.getElementById('drop-zone');
     const fileInput = document.getElementById('file-input');
@@ -97,6 +92,13 @@ async function uploadFile() {
         });
         const data = await res.json();
         if(data.success) {
+            // Trigger push notification to all users
+            localStorage.setItem('trigger_push_notification', JSON.stringify({
+                title: "New Document Added",
+                message: `Admin uploaded a new document: ${selectedFile.name}`,
+                timestamp: Date.now()
+            }));
+            
             clearFile();
             await fetchDocuments();
         } else {

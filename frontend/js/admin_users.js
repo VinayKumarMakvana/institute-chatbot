@@ -6,12 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentUser = await requireAuth();
     if(!currentUser) return;
 
-    // 2. Set Profile info
-    const nameSplit = currentUser.name.split(' ');
-    document.getElementById('admin-avatar').textContent = nameSplit[0][0] + (nameSplit[1] ? nameSplit[1][0] : '');
-    document.getElementById('admin-name').textContent = currentUser.name;
-    document.getElementById('admin-role').textContent = 'Super Admin';
-
     // 3. Fetch Real Data
     await fetchUsers();
 });

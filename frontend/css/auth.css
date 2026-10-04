@@ -385,33 +385,6 @@ form {
 }
 .link:hover { color: #58E892; text-decoration: underline; }
 
-.divider {
-    position: relative;
-    text-align: center;
-    margin: 0.25rem 0;
-}
-.divider::before, .divider::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 42%;
-    height: 1px;
-    background: rgba(255,255,255,0.1);
-}
-.divider::before { left: 0; }
-.divider::after { right: 0; }
-.divider span {
-    font-size: 0.7rem;
-    color: #9ca3af;
-    background: transparent;
-    padding: 0 10px;
-}
-
-.signup-prompt {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #9ca3af;
-}
 
 .btn-primary {
     padding: 10px;

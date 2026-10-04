@@ -80,11 +80,11 @@ input,
 select, 
 textarea {
     width: 100%;
-    min-height: 40px;
+    min-height: 36px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius-sm);
-    padding: 8px 12px;
+    padding: 7px 12px;
     color: var(--text-primary);
     font-size: 0.85rem;
     outline: none;
@@ -129,4 +129,13 @@ select option:hover, select option:focus, select option:checked {
     font-size: 0.8rem;
     min-height: 16px;
     text-align: center;
+}
+
+/* Anti-Flicker Snippet: Hide everything until JS loads the actual data */
+body:not(.page-ready) .dashboard-body,
+body:not(.page-ready) .top-navbar,
+body:not(.page-ready) .sidebar,
+body:not(.page-ready) .main-content {
+    opacity: 0 !important;
+    visibility: hidden !important;
 }

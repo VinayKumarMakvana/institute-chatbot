@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('nav-name').textContent = user.name;
     const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
     document.getElementById('nav-avatar').textContent = initials;
-    document.getElementById('nav-role').textContent = user.role;
 
     const chatContainer = document.getElementById('chat-messages');
     const inputBox = document.getElementById('chat-input-box');

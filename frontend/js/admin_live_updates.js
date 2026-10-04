@@ -5,11 +5,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     currentUser = await requireAuth();
     if(!currentUser) return;
 
-    const nameSplit = currentUser.name.split(' ');
-    document.getElementById('nav-avatar').textContent = nameSplit[0][0] + (nameSplit[1] ? nameSplit[1][0] : '');
-    document.getElementById('nav-name').textContent = currentUser.name;
-    document.getElementById('nav-role').textContent = 'Super Admin';
-
     // Set default datetime to now
     const now = new Date();
     now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
@@ -218,6 +213,13 @@ async function publishUpdate(id, doFetch = true) {
     try {
         const res = await apiFetch('/live_updates/' + id + '/publish', { method: 'POST' });
         if(res.ok) {
+            // Trigger push notification to all users
+            localStorage.setItem('trigger_push_notification', JSON.stringify({
+                title: "New Announcement",
+                message: `Admin has published a new announcement.`,
+                timestamp: Date.now()
+            }));
+            
             if(doFetch) await fetchUpdates();
             else {
                 resetForm();

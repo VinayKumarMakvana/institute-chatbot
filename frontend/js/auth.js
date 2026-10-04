@@ -37,14 +37,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                 
                 if (response.ok && data.success) {
                     setToken(data.data.token);
-                    // Redirect based on role
                     if (data.data.user.role === 'ADMIN') {
-                        window.location.href = 'admin_users.html';
+                        window.location.href = 'admin.html';
                     } else {
                         window.location.href = 'index.html';
                     }
                 } else {
                     errorEl.textContent = data.detail || data.message || 'Invalid credentials.';
+                    errorEl.style.display = 'block';
                 }
             } catch (err) {
                 console.error("Login request failed:", err);

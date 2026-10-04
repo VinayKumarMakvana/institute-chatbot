@@ -69,7 +69,9 @@ body.dashboard-page {
 .navbar-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 1rem;
+    min-width: 220px; /* match left side to keep center aligned perfectly */
 }
 .icon-action-btn {
     background: none; border: none; color: #9ca3af; cursor: pointer;
@@ -513,31 +515,7 @@ body.dashboard-page {
 .action-btn-icon:hover { background: rgba(255,255,255,0.05); color: #fff; }
 .action-btn-icon.delete:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
 
-@media (max-width: 1024px) {
-    .content-grid { grid-template-columns: 1fr; }
-    
-    .navbar-brand { width: auto; font-size: 0.8rem; }
-    .navbar-search { display: none; }
-    .top-navbar { padding: 0 1rem; }
-    
-    .sidebar { 
-        position: fixed; left: -240px; top: 0; bottom: 0; width: 240px; 
-        z-index: 50; transition: left 0.3s ease; height: 100%;
-    }
-    .sidebar.open { left: 0; }
-    
-    .main-content { padding: 1rem; }
-    
-    .page-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-    .page-header h1 { font-size: 1rem; }
-    
-    .category-card { min-width: 130px; padding: 8px 10px; }
-    .cat-title { font-size: 0.7rem; }
-    .cat-sub { display: none; }
-    
-    .list-panel { padding: 1rem; }
-    .side-widget { padding: 1rem; }
-}
+/* Responsive layout handled by responsive.css */
 
 /* Common Panel & Form Layouts */
 .panel-card {
@@ -619,9 +597,13 @@ body.dashboard-page {
     padding-left: 36px;
     width: 100%;
 }
-.filters-bar select.filter-select {
+select.filter-select {
     width: auto;
-    min-width: 140px;
+    min-width: 120px;
+    height: 36px;
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 0.8rem;
     cursor: pointer;
 }
 .filters-bar .action-btn-icon {

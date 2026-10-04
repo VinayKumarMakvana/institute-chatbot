@@ -27,14 +27,15 @@ async def get_current_user(token: str = Depends(reusable_oauth2), db: AsyncSessi
     
     # If admin, construct a generic admin user object to avoid db hit for config-based admin
     if token_data.role == "ADMIN" and token_data.sub == settings.ADMIN_EMAIL:
+        from app.db.models import utc_now
         return UserResponse(
             id="admin_id",
             email=settings.ADMIN_EMAIL,
             name="Administrator",
             role="ADMIN",
             is_active=True,
-            created_at=None,
-            last_login_at=None
+            created_at=utc_now(),
+            last_login_at=utc_now()
         )
 
     # Fetch user from db

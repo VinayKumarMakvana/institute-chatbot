@@ -1,16 +1,16 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const user = await requireAuth();
     if (!user) return;
-    if (user.role !== 'Admin') {
+    if (user.role !== 'ADMIN') {
         window.location.href = 'index.html';
         return;
     }
+
 
     // Display Admin info in Nav
     document.getElementById('nav-name').textContent = user.name;
     const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
     document.getElementById('nav-avatar').textContent = initials;
-    document.getElementById('nav-role').textContent = 'Administrator';
 
     const container = document.getElementById('profile-container');
     const viewHeader = document.getElementById('view-header');

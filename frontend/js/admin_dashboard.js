@@ -87,6 +87,58 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
 
+            // Analytics Graph
+            if (result.data.analytics) {
+                const graphData = result.data.analytics.graph;
+                const chartContainer = document.getElementById('analytics-chart-container');
+                if (chartContainer) {
+                    const maxCount = Math.max(...graphData.map(d => d.count), 1);
+                    const barsHtml = graphData.map(d => {
+                        const heightPct = (d.count / maxCount) * 100;
+                        const dateObj = new Date(d.date);
+                        const label = dateObj.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+                        return `
+                        <div style="display: flex; flex-direction: column; justify-content: flex-end; align-items: center; flex: 1; height: 100%; group">
+                            <div style="position: relative; width: 30px; height: 100%; display: flex; align-items: flex-end; justify-content: center;">
+                                <div style="background: rgba(16, 185, 129, 0.2); width: 100%; height: 100%; position: absolute; bottom: 0; border-radius: 4px;"></div>
+                                <div style="background: #10b981; width: 100%; height: ${heightPct}%; border-radius: 4px; position: relative; z-index: 2; transition: height 0.5s;">
+                                    <div style="position: absolute; top: -25px; left: 50%; transform: translateX(-50%); background: #000; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; opacity: 1; pointer-events: none;">${d.count}</div>
+                                </div>
+                            </div>
+                            <div style="font-size: 0.65rem; color: #9ca3af; margin-top: 8px;">${label}</div>
+                        </div>`;
+                    }).join('');
+                    
+                    chartContainer.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; height: 100%; width: 100%; padding-top: 20px; gap: 10px;">
+                        ${barsHtml}
+                    </div>`;
+                }
+
+                // Analytics Categories
+                const categoriesData = result.data.analytics.categories;
+                const catContainer = document.getElementById('analytics-categories-container');
+                if (catContainer) {
+                    const colors = ['#3b82f6', '#10b981', '#8b5cf6', '#f59e0b', '#ef4444', '#06b6d4', '#eab308', '#6b7280'];
+                    const icons = ['book', 'edit-3', 'user-plus', 'file-check', 'credit-card', 'library', 'home', 'more-horizontal'];
+                    
+                    catContainer.innerHTML = categoriesData.map((c, i) => {
+                        const color = colors[i % colors.length];
+                        const icon = icons[i % icons.length];
+                        return `
+                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
+                            <div style="background: ${color}; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="${icon}" style="width:10px; height:10px;"></i></div>
+                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.name}</div>
+                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
+                                <div style="background: ${color}; width: ${c.percentage}%; height: 100%; border-radius: 3px;"></div>
+                            </div>
+                            <div style="color: #9ca3af; width: 35px; text-align: right;">${c.count}</div>
+                            <div style="color: #fff; width: 25px; text-align: right;">${c.percentage}%</div>
+                        </div>`;
+                    }).join('');
+                }
+            }
+
             if(window.lucide) {
                 window.lucide.createIcons();
             }

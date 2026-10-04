@@ -3,39 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Live Updates</title>
+    <title>Live Updates & Announcements</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest">
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar, .chat-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                if (overlay) { overlay.classList.remove('show'); }
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                if (overlay) { overlay.classList.add('show'); }
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        </script>
     
-    <link rel="stylesheet" href="./css/globals.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
-    
+    <link rel="stylesheet" href="./css/globals.css?v=1791106279">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1791106279">
+    <link rel="stylesheet" href="./css/responsive.css?v=1791106279">
+    <style>
+        .update-card { background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; transition: all 0.2s; cursor: pointer; }
+        .update-card:hover { background: rgba(255,255,255,0.02); border-color: rgba(0, 210, 97, 0.2); }
+        .update-card.active { border-color: #00D261; background: rgba(0, 210, 97, 0.05); }
+    </style>
 </head>
 <body class="dashboard-page">
 
-    <!-- Top Navbar -->
     <nav class="top-navbar">
         <div class="navbar-brand">
             <i data-lucide="graduation-cap" class="text-green"></i>
             Institution <span class="text-green">AI Assistant</span>
         </div>
-        
+            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
-            <input type="text" placeholder="Search...">
+            <input type="text" placeholder="Search announcements, notices, or keywords...">
         </div>
-        
         <div class="navbar-actions">
             <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
                 <i data-lucide="bell"></i>
                 <span class="badge" id="nav-badge-count">0</span>
             </button>
             <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
-                <div class="user-avatar" id="nav-avatar">U</div>
+                <div class="user-avatar" id="nav-avatar"></div>
                 <div class="user-info">
-                    <span class="user-name" id="nav-name">Student</span>
-                    <span class="user-role" id="nav-role">BCA 2nd Sem</span>
+                    <span class="user-name" id="nav-name"></span>
+                    <span class="user-role" id="nav-role"></span>
                 </div>
             </div>
         </div>
@@ -45,91 +65,216 @@
 
     <div class="dashboard-body">
         
-        <!-- Left Sidebar (User) -->
+        <!-- User Sidebar -->
         <aside class="sidebar">
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> AI Chatbot</a></li>
-                <li><a href="chat_history.html" class="nav-item" id="nav-history"><i data-lucide="message-square"></i> My Queries</a></li>
+                <li><a href="chat_history.html" class="nav-item" id="nav-history"><i data-lucide="message-square"></i> Chat History</a></li>
                 <li><a href="saved_answers.html" class="nav-item" id="nav-saved"><i data-lucide="bookmark"></i> Saved Answers</a></li>
                 <li><a href="documents.html" class="nav-item" id="nav-docs"><i data-lucide="book-open"></i> Documents Library</a></li>
-                <li><a href="document_viewer.html" class="nav-item" id="nav-viewer"><i data-lucide="file-search"></i> Document Viewer</a></li>
-                <li><a href="live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="live_updates.html" class="nav-item active" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="notifications.html" class="nav-item" id="nav-notifications"><i data-lucide="bell"></i> Notifications</a></li>
             </ul>
             <div style="margin-top: auto;">
                 <div class="nav-divider"></div>
                 <ul class="nav-menu">
-                    <li>
-                        <a href="notifications.html" class="nav-item" id="nav-notifications">
-                            <i data-lucide="bell"></i> Notifications <span class="badge" id="sidebar-badge" style="margin-left:auto;">0</span>
-                        </a>
-                    </li>
                     <li><a href="profile.html" class="nav-item" id="nav-profile"><i data-lucide="user"></i> Profile & Settings</a></li>
                     <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
                 </ul>
             </div>
         </aside>
 
-        
-        <main class="main-content">
+        <main class="main-content" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; height: calc(100vh - 70px); overflow-y: auto;">
             
-    <div class="page-header">
-        <div class="page-header-left">
-            <div class="page-header-icon" style="color: #ec4899; background: rgba(236, 72, 153, 0.1);"><i data-lucide="radio"></i></div>
-            <div><h1>Live Updates</h1><p>Real-time announcements and emergency notices.</p></div>
-        </div>
-    </div>
-    
-            
-    <div id="updates-container" style="position: relative; padding-left: 30px; border-left: 2px solid rgba(0, 210, 97, 0.2); margin-left: 20px; display: flex; flex-direction: column; gap: 30px;">
-        <!-- Dynamically loaded -->
-    </div>
-    
+            <div class="page-header" style="flex-direction: row; justify-content: space-between; align-items: center; margin-bottom: 0;">
+                <div class="page-header-left">
+                    <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);"><i data-lucide="megaphone"></i></div>
+                    <div>
+                        <h1 style="font-size: 1.5rem; color: #fff; margin-bottom: 6px;">Institution Announcements</h1>
+                        <p style="color: #9ca3af; font-size: 0.85rem;">Stay up-to-date with the latest notices, events, and important information.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+                
+                <!-- Updates Feed -->
+                <div style="flex: 1.5; display: flex; flex-direction: column; gap: 1rem;" id="updates-feed">
+                    <div style="text-align:center; padding: 2rem; color: #9ca3af;">Loading announcements...</div>
+                </div>
+
+                <!-- Preview / Reader Pane -->
+                <div style="flex: 1; position: sticky; top: 0;" id="reader-pane-container">
+                    <div id="reader-placeholder" style="background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 3rem; text-align: center; color: #9ca3af;">
+                        <i data-lucide="book-open" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;"></i>
+                        <p>Select an announcement to read the full details here.</p>
+                    </div>
+                    
+                    <div id="reader-content" style="display: none; background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <div style="display: flex; gap: 8px;">
+                                <span class="badge" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6;" id="read-cat">Category</span>
+                                <span class="badge" id="read-priority" style="background: rgba(255,255,255,0.1); color: #fff; display:none;">High Priority</span>
+                            </div>
+                            <div style="color: #9ca3af; font-size: 0.75rem;" id="read-date">Date</div>
+                        </div>
+                        <h4 id="read-title" style="color: #fff; font-size: 1.25rem; margin-bottom: 16px; line-height: 1.3;">Announcement Title</h4>
+                        
+                        <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <div style="width: 24px; height: 24px; background: rgba(0,210,97,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #00D261;">
+                                <i data-lucide="user" style="width: 14px; height: 14px;"></i>
+                            </div>
+                            <div style="color: #d1d5db; font-size: 0.8rem;" id="read-author">Admin</div>
+                        </div>
+                        
+                        <div id="read-body" style="color: #d1d5db; font-size: 0.95rem; line-height: 1.6;">
+                            Content goes here...
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="./js/api.js"></script>
-    <script src="./js/live_updates.js"></script>
+    <script src="./js/api.js?v=1791106279"></script>
     <script>
-        lucide.createIcons();
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            } else {
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
+        let allUpdates = [];
+        
+        async function fetchUpdates() {
+            try {
+                const response = await apiFetch('/live-updates');
+                const data = await response.json();
+                if(data.success) {
+                    allUpdates = data.data.filter(u => u.status === 'PUBLISHED'); // Users only see published
+                    renderFeed(allUpdates);
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('updates-feed').innerHTML = '<div style="color:#ef4444;">Failed to load announcements.</div>';
             }
         }
-        
-        // Mock Auth check just to show user names
-        document.addEventListener('DOMContentLoaded', async () => {
-            const user = await requireAuth();
-            if(user) {
-                document.getElementById('nav-name').textContent = user.name;
-                const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-                document.getElementById('nav-avatar').textContent = initials;
-                document.getElementById('nav-role').textContent = user.role;
+
+        function renderFeed(updates) {
+            const feed = document.getElementById('updates-feed');
+            if(updates.length === 0) {
+                feed.innerHTML = '<div style="color:#9ca3af;">No recent announcements.</div>';
+                return;
             }
+            
+            feed.innerHTML = updates.map(u => {
+                const isHigh = u.priority === 'HIGH';
+                const date = new Date(u.published_at || u.created_at).toLocaleDateString();
+                const snippet = u.content.substring(0, 100) + (u.content.length > 100 ? '...' : '');
+                
+                return `
+                    <div class="update-card" id="card-${u.id}" onclick="readUpdate('${u.id}')">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <div style="display:flex; gap:8px; align-items:center;">
+                                <span class="badge" style="background:rgba(255,255,255,0.05); color:#d1d5db;">${u.category || 'General'}</span>
+                                ${isHigh ? '<span class="badge" style="background:rgba(239,68,68,0.2); color:#ef4444;">High Priority</span>' : ''}
+                            </div>
+                            <span style="color:#9ca3af; font-size:0.75rem;">${date}</span>
+                        </div>
+                        <div style="color:#fff; font-weight:600; font-size:1.1rem; margin-bottom:6px;">${u.title}</div>
+                        <div style="color:#9ca3af; font-size:0.85rem; line-height:1.5;">${snippet}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            if(window.lucide) lucide.createIcons();
+            
+            // Auto open first if exists
+            if(updates.length > 0) {
+                readUpdate(updates[0].id);
+            }
+        }
+
+        function readUpdate(id) {
+            const u = allUpdates.find(x => x.id === id);
+            if(!u) return;
+            
+            document.querySelectorAll('.update-card').forEach(c => c.classList.remove('active'));
+            const card = document.getElementById(`card-${id}`);
+            if(card) card.classList.add('active');
+            
+            document.getElementById('reader-placeholder').style.display = 'none';
+            document.getElementById('reader-content').style.display = 'block';
+            
+            document.getElementById('read-title').textContent = u.title;
+            document.getElementById('read-cat').textContent = u.category || 'General';
+            const badge = document.getElementById('read-priority');
+            if(u.priority === 'HIGH') {
+                badge.style.display = 'inline-block';
+                badge.style.background = 'rgba(239, 68, 68, 0.2)';
+                badge.style.color = '#ef4444';
+            } else {
+                badge.style.display = 'none';
+            }
+            
+            document.getElementById('read-date').textContent = new Date(u.published_at || u.created_at).toLocaleDateString();
+            document.getElementById('read-author').textContent = u.created_by || 'Admin';
+            document.getElementById('read-body').innerHTML = u.content.replace(/\n/g, '<br>');
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await requireAuth();
+            if(window.lucide) { lucide.createIcons(); }
+            fetchUpdates();
         });
     </script>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="index.html" class="bottom-nav-item" id="bnav-chat">
+            <i data-lucide="message-circle"></i>
+            <span>Chatbot</span>
+        </a>
+        <a href="chat_history.html" class="bottom-nav-item" id="bnav-history">
+            <i data-lucide="clock"></i>
+            <span>History</span>
+        </a>
+        <a href="documents.html" class="bottom-nav-item" id="bnav-docs">
+            <i data-lucide="book-open"></i>
+            <span>Docs</span>
+        </a>
+        <a href="live_updates.html" class="bottom-nav-item" id="bnav-updates">
+            <i data-lucide="megaphone"></i>
+            <span>Updates</span>
+        </a>
+        <a href="notifications.html" class="bottom-nav-item" id="bnav-notif">
+            <i data-lucide="bell"></i>
+            <span>Alerts</span>
+            <span class="bottom-nav-badge" id="bnav-badge" style="display:none;"></span>
+        </a>
+    </nav>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const path = window.location.pathname;
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if(path.includes('index.html') || path === '/' || path.endsWith('/')) document.getElementById('nav-chat')?.classList.add('active');
-            else if(path.includes('chat_history.html')) document.getElementById('nav-history')?.classList.add('active');
-            else if(path.includes('saved_answers.html')) document.getElementById('nav-saved')?.classList.add('active');
-            else if(path.includes('documents.html')) document.getElementById('nav-docs')?.classList.add('active');
-            else if(path.includes('document_viewer.html')) document.getElementById('nav-viewer')?.classList.add('active');
-            else if(path.includes('live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
-            else if(path.includes('notifications.html')) document.getElementById('nav-notifications')?.classList.add('active');
-            else if(path.includes('profile.html')) document.getElementById('nav-profile')?.classList.add('active');
-        });
+    // Activate bottom nav item based on current page
+    (function() {
+        var page = window.location.pathname.split('/').pop() || 'index.html';
+        var map = {
+            'index.html': 'bnav-chat',
+            'chat_history.html': 'bnav-history',
+            'documents.html': 'bnav-docs',
+            'live_updates.html': 'bnav-updates',
+            'notifications.html': 'bnav-notif',
+            'saved_answers.html': 'bnav-docs',
+            'profile.html': 'bnav-notif',
+            'admin.html': 'bnav-dashboard',
+            'admin_chatbot.html': 'bnav-chatbot',
+            'admin_documents.html': 'bnav-docs',
+            'admin_live_updates.html': 'bnav-updates',
+            'admin_users.html': 'bnav-users',
+        };
+        var active = map[page];
+        if (active) {
+            var el = document.getElementById(active);
+            if (el) el.classList.add('active');
+        }
+    })();
     </script>
-</body>
 
+</body>
 </html>

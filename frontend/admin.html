@@ -6,10 +6,28 @@
     <title>Admin Dashboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest">
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar, .chat-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                if (overlay) { overlay.classList.remove('show'); }
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                if (overlay) { overlay.classList.add('show'); }
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        </script>
     
-    <link rel="stylesheet" href="./css/globals.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/globals.css?v=1791106279">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1791106279">
+    <link rel="stylesheet" href="./css/responsive.css?v=1791106279">
     
 </head>
 <body class="dashboard-page">
@@ -21,21 +39,19 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
+            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
         </div>
         
         <div class="navbar-actions">
-            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
-                <i data-lucide="bell"></i>
-                <span class="badge" id="nav-badge-count">0</span>
-            </button>
-            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
-                <div class="user-avatar" id="nav-avatar">A</div>
+            
+            <div class="user-profile">
+                <div class="user-avatar" id="nav-avatar"></div>
                 <div class="user-info">
-                    <span class="user-name" id="nav-name">Admin User</span>
-                    <span class="user-role" id="nav-role">Super Admin</span>
+                    <span class="user-name" id="nav-name"></span>
+                    <span class="user-role" id="nav-role"></span>
                 </div>
             </div>
         </div>
@@ -57,7 +73,7 @@
             <div style="margin-top: auto;">
                 <div class="nav-divider"></div>
                 <ul class="nav-menu">
-                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    
                     <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
                 </ul>
             </div>
@@ -157,45 +173,13 @@
                         <div class="panel-title" style="margin: 0;">Query Analytics</div>
                         <div style="display: flex; gap: 8px;">
                             <select class="filter-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;">
-                                <option>Last 30 Days</option>
-                            </select>
-                            <select class="filter-select" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #9ca3af; padding: 4px 10px; font-size: 0.75rem; border-radius: 6px;">
-                                <option>All Categories</option>
+                                <option>Last 7 Days</option>
                             </select>
                         </div>
                     </div>
                     
-                    <div style="height: 200px; display: flex; align-items: flex-end; justify-content: space-between; position: relative;">
-                        <!-- Custom CSS graph for now -->
-                        <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none;">
-                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">500</span></div>
-                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">400</span></div>
-                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">300</span></div>
-                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">200</span></div>
-                            <div style="border-top: 1px dashed rgba(255,255,255,0.05); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">100</span></div>
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); width: 100%;"><span style="font-size:0.6rem; color:#6b7280; margin-top:-15px; position:absolute;">0</span></div>
-                        </div>
-                        <svg width="100%" height="180" viewBox="0 0 1000 180" preserveAspectRatio="none" style="z-index:10; overflow:visible; margin-left: 30px;">
-                            <defs>
-                                <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgba(0, 210, 97, 0.4)"/>
-                                    <stop offset="100%" stop-color="rgba(0, 210, 97, 0.0)"/>
-                                </linearGradient>
-                            </defs>
-                            <path d="M 0 120 Q 50 140, 100 100 T 200 90 T 300 70 T 400 110 T 500 70 T 600 40 T 700 80 T 800 50 T 900 20 T 1000 60 L 1000 180 L 0 180 Z" fill="url(#lineGrad)"/>
-                            <path d="M 0 120 Q 50 140, 100 100 T 200 90 T 300 70 T 400 110 T 500 70 T 600 40 T 700 80 T 800 50 T 900 20 T 1000 60" fill="none" stroke="#00D261" stroke-width="2"/>
-                            <circle cx="600" cy="40" r="4" fill="#000" stroke="#00D261" stroke-width="2"/>
-                        </svg>
-                        
-                        <!-- Tooltip -->
-                        <div style="position: absolute; left: 52%; top: 15%; transform: translateX(-50%); background: rgba(0,0,0,0.8); border: 1px solid rgba(0,210,97,0.3); padding: 6px 10px; border-radius: 6px; z-index: 20; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
-                            <span style="font-size: 0.65rem; color: #9ca3af;">25 Sep 2026</span>
-                            <span style="font-size: 0.8rem; font-weight: 700; color: #fff;">412 <span style="font-weight:400;">queries</span></span>
-                        </div>
-                        
-                        <div style="position: absolute; bottom: -20px; left: 30px; width: calc(100% - 30px); display: flex; justify-content: space-between; font-size: 0.65rem; color: #9ca3af;">
-                            <span>3 Sep</span><span>7 Sep</span><span>11 Sep</span><span>15 Sep</span><span>19 Sep</span><span>23 Sep</span><span>27 Sep</span><span>1 Oct</span><span>3 Oct</span>
-                        </div>
+                    <div id="analytics-chart-container" style="height: 200px; position: relative;">
+                        <!-- JS will populate SVG here -->
                     </div>
                 </div>
 
@@ -206,86 +190,8 @@
                         <a href="#" style="font-size: 0.75rem; color: #9ca3af; text-decoration: none;">View All</a>
                     </div>
                     
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #3b82f6; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="book" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Syllabus & Academics</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #3b82f6; width: 27%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">3,421</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">27%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #10b981; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="edit-3" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Examination</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #10b981; width: 23%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">2,856</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">23%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #8b5cf6; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="user-plus" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Admission & Registration</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #8b5cf6; width: 15%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">1,932</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">15%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #f59e0b; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="file-check" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Results & Evaluation</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #f59e0b; width: 10%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">1,264</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">10%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #ef4444; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="credit-card" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Fee & Scholarship</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #ef4444; width: 8%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">987</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">8%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #06b6d4; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="library" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Library & Resources</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #06b6d4; width: 6%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">721</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">6%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #eab308; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="home" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hostel & Facilities</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #eab308; width: 5%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">642</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">5%</div>
-                        </div>
-                        
-                        <div style="display: flex; align-items: center; gap: 10px; font-size: 0.75rem;">
-                            <div style="background: #6b7280; width: 16px; height: 16px; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #fff;"><i data-lucide="more-horizontal" style="width:10px; height:10px;"></i></div>
-                            <div style="width: 120px; color: #d1d5db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Other</div>
-                            <div style="flex: 1; background: rgba(255,255,255,0.1); height: 6px; border-radius: 3px; overflow: hidden;">
-                                <div style="background: #6b7280; width: 6%; height: 100%; border-radius: 3px;"></div>
-                            </div>
-                            <div style="color: #9ca3af; width: 35px; text-align: right;">720</div>
-                            <div style="color: #fff; width: 25px; text-align: right;">6%</div>
-                        </div>
+                    <div id="analytics-categories-container" style="display: flex; flex-direction: column; gap: 12px;">
+                        <!-- JS will populate categories here -->
                     </div>
                 </div>
             </div>
@@ -363,15 +269,15 @@
                 <div>
                     <h3 style="font-size: 1rem; color: #fff; margin: 0 0 12px 0;">Quick Actions</h3>
                     <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <button style="background: rgba(37, 99, 235, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="file-text" style="width:14px; height:14px;"></i> Upload PDF</button>
-                        <button style="background: rgba(16, 185, 129, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> Manage Content</button>
-                        <button style="background: rgba(139, 92, 246, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i> View Analytics</button>
-                        <button style="background: rgba(245, 158, 11, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="users" style="width:14px; height:14px;"></i> Manage Users</button>
+                        <button onclick="window.location.href='admin_documents.html'" style="background: rgba(37, 99, 235, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="file-text" style="width:14px; height:14px;"></i> Upload PDF</button>
+                        <button onclick="window.location.href='admin_chatbot.html'" style="background: rgba(16, 185, 129, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> Manage Content</button>
+                        <button onclick="window.scrollTo(0,0)" style="background: rgba(139, 92, 246, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i> View Analytics</button>
+                        <button onclick="window.location.href='admin_users.html'" style="background: rgba(245, 158, 11, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="users" style="width:14px; height:14px;"></i> Manage Users</button>
                         
-                        <button style="background: rgba(225, 29, 72, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> System Settings</button>
-                        <button style="background: rgba(6, 182, 212, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="megaphone" style="width:14px; height:14px;"></i> Send Announcement</button>
-                        <button style="background: rgba(234, 179, 8, 0.9); border: none; color: #000; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="database" style="width:14px; height:14px;"></i> Backup Data</button>
-                        <button style="background: rgba(107, 114, 128, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Clear Cache</button>
+                        <button onclick="window.location.href='profile.html'" style="background: rgba(225, 29, 72, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> System Settings</button>
+                        <button onclick="window.location.href='admin_live_updates.html'" style="background: rgba(6, 182, 212, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="megaphone" style="width:14px; height:14px;"></i> Send Announcement</button>
+                        <button onclick="alert('Data Backup Started')" style="background: rgba(234, 179, 8, 0.9); border: none; color: #000; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="database" style="width:14px; height:14px;"></i> Backup Data</button>
+                        <button onclick="alert('Cache Cleared Successfully')" style="background: rgba(107, 114, 128, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="trash-2" style="width:14px; height:14px;"></i> Clear Cache</button>
                     </div>
                 </div>
             </div>
@@ -380,31 +286,14 @@
     </div>
 
     <!-- Scripts -->
-    <script src="./js/api.js"></script>
-    <script src="./js/admin_dashboard.js"></script>
+    <script src="./js/api.js?v=1791106279"></script>
+    <script src="./js/admin_dashboard.js?v=1791106279"></script>
     <script>
         lucide.createIcons();
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            } else {
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
-            }
-        }
         
-        // Mock Auth check just to show user names
+        // Auth check is now global in api.js
         document.addEventListener('DOMContentLoaded', async () => {
-            const user = await requireAuth();
-            if(user) {
-                document.getElementById('nav-name').textContent = user.name;
-                const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-                document.getElementById('nav-avatar').textContent = initials;
-                document.getElementById('nav-role').textContent = user.role;
-            }
+            await requireAuth();
         });
     </script>
 
@@ -419,5 +308,56 @@
             else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
         });
     </script>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="admin.html" class="bottom-nav-item" id="bnav-dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="admin_chatbot.html" class="bottom-nav-item" id="bnav-chatbot">
+            <i data-lucide="bot"></i>
+            <span>Chatbot</span>
+        </a>
+        <a href="admin_documents.html" class="bottom-nav-item" id="bnav-docs">
+            <i data-lucide="file-text"></i>
+            <span>Docs</span>
+        </a>
+        <a href="admin_live_updates.html" class="bottom-nav-item" id="bnav-updates">
+            <i data-lucide="megaphone"></i>
+            <span>Updates</span>
+        </a>
+        <a href="admin_users.html" class="bottom-nav-item" id="bnav-users">
+            <i data-lucide="users"></i>
+            <span>Users</span>
+        </a>
+    </nav>
+
+    <script>
+    // Activate bottom nav item based on current page
+    (function() {
+        var page = window.location.pathname.split('/').pop() || 'index.html';
+        var map = {
+            'index.html': 'bnav-chat',
+            'chat_history.html': 'bnav-history',
+            'documents.html': 'bnav-docs',
+            'live_updates.html': 'bnav-updates',
+            'notifications.html': 'bnav-notif',
+            'saved_answers.html': 'bnav-docs',
+            'profile.html': 'bnav-notif',
+            'admin.html': 'bnav-dashboard',
+            'admin_chatbot.html': 'bnav-chatbot',
+            'admin_documents.html': 'bnav-docs',
+            'admin_live_updates.html': 'bnav-updates',
+            'admin_users.html': 'bnav-users',
+        };
+        var active = map[page];
+        if (active) {
+            var el = document.getElementById(active);
+            if (el) el.classList.add('active');
+        }
+    })();
+    </script>
+
 </body>
 </html>

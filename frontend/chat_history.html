@@ -3,14 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>My Queries</title>
+    <title>Chat History</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest">
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar, .chat-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                if (overlay) { overlay.classList.remove('show'); }
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                if (overlay) { overlay.classList.add('show'); }
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
-    <link rel="stylesheet" href="./css/globals.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
-    
+    <link rel="stylesheet" href="./css/globals.css?v=1791106279">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1791106279">
+    <link rel="stylesheet" href="./css/chat_ui.css?v=1791106279">
+    <link rel="stylesheet" href="./css/responsive.css?v=1791106279">
+    <style>
+        .history-item {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .history-item:hover {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .history-item.active {
+            background: rgba(0, 210, 97, 0.05);
+            border-color: rgba(0, 210, 97, 0.3);
+        }
+        .history-icon-box {
+            width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .history-tag {
+            background: rgba(255,255,255,0.05); color: #9ca3af; font-size: 0.65rem; padding: 2px 8px; border-radius: 12px;
+        }
+        /* Scoped markdown styles for detail view */
+        .markdown-body { color: #d1d5db; font-size: 0.85rem; line-height: 1.5; }
+        .markdown-body ul, .markdown-body ol { margin-left: 20px; margin-bottom: 10px; }
+        .markdown-body li { margin-bottom: 4px; }
+        .markdown-body p { margin-bottom: 10px; }
+        .markdown-body strong { color: #fff; }
+    </style>
 </head>
 <body class="dashboard-page">
 
@@ -21,21 +73,23 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
+            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
         </div>
         
         <div class="navbar-actions">
+            
             <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
                 <i data-lucide="bell"></i>
                 <span class="badge" id="nav-badge-count">0</span>
             </button>
             <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
-                <div class="user-avatar" id="nav-avatar">U</div>
+                <div class="user-avatar" id="nav-avatar"></div>
                 <div class="user-info">
-                    <span class="user-name" id="nav-name">Student</span>
-                    <span class="user-role" id="nav-role">BCA 2nd Sem</span>
+                    <span class="user-name" id="nav-name"></span>
+                    <span class="user-role" id="nav-role"></span>
                 </div>
             </div>
         </div>
@@ -49,91 +103,133 @@
         <aside class="sidebar">
             <ul class="nav-menu">
                 <li><a href="index.html" class="nav-item" id="nav-chat"><i data-lucide="bot"></i> AI Chatbot</a></li>
-                <li><a href="chat_history.html" class="nav-item" id="nav-history"><i data-lucide="message-square"></i> My Queries</a></li>
+                <li><a href="chat_history.html" class="nav-item active" id="nav-history"><i data-lucide="message-square"></i> Chat History</a></li>
                 <li><a href="saved_answers.html" class="nav-item" id="nav-saved"><i data-lucide="bookmark"></i> Saved Answers</a></li>
                 <li><a href="documents.html" class="nav-item" id="nav-docs"><i data-lucide="book-open"></i> Documents Library</a></li>
-                <li><a href="document_viewer.html" class="nav-item" id="nav-viewer"><i data-lucide="file-search"></i> Document Viewer</a></li>
                 <li><a href="live_updates.html" class="nav-item" id="nav-updates"><i data-lucide="megaphone"></i> Live Updates</a></li>
+                <li><a href="notifications.html" class="nav-item" id="nav-notifications"><i data-lucide="bell"></i> Notifications</a></li>
             </ul>
             <div style="margin-top: auto;">
                 <div class="nav-divider"></div>
                 <ul class="nav-menu">
-                    <li>
-                        <a href="notifications.html" class="nav-item" id="nav-notifications">
-                            <i data-lucide="bell"></i> Notifications <span class="badge" id="sidebar-badge" style="margin-left:auto;">0</span>
-                        </a>
-                    </li>
                     <li><a href="profile.html" class="nav-item" id="nav-profile"><i data-lucide="user"></i> Profile & Settings</a></li>
                     <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
                 </ul>
             </div>
         </aside>
 
-        
-        <main class="main-content">
+        <main class="main-content" style="display: flex; flex-direction: column; height: calc(100vh - 70px); padding: 1.5rem;">
             
-    <div class="page-header">
-        <div class="page-header-left">
-            <div class="page-header-icon"><i data-lucide="message-square"></i></div>
-            <div><h1>Chat History</h1><p>Review your previous conversations with the AI.</p></div>
-        </div>
-        <div class="search-box" style="display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:6px 12px; border-radius:6px; gap:8px;">
-            <i data-lucide="search" style="width:16px; color:#9ca3af;"></i>
-            <input type="text" placeholder="Search chats..." style="background:transparent; border:none; color:#fff; outline:none; font-size:0.8rem;">
-        </div>
-    </div>
-    
+            <div class="page-header" style="margin-bottom: 1.5rem;">
+                <div class="page-header-left">
+                    <div class="page-header-icon" style="color: #00D261; background: rgba(0, 210, 97, 0.1);"><i data-lucide="clock"></i></div>
+                    <div><h1>Chat History</h1><p>View your past questions, answers and related documents.</p></div>
+                </div>
+            </div>
             
-    <div id="history-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-        <!-- Loaded dynamically -->
-    </div>
-    
+            <div style="display: flex; gap: 1.5rem; flex: 1; overflow: hidden;">
+                <!-- Master List (Left Column) -->
+                <div style="width: 45%; display: flex; flex-direction: column; gap: 1rem;">
+                    
+                    <!-- Filters -->
+                    <div style="display: flex; gap: 10px;">
+                        <div class="search-box" style="flex: 1; display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; height: 36px; border-radius:8px; gap:8px;">
+                            <i data-lucide="search" style="width:16px; color:#9ca3af;"></i>
+                            <input type="text" id="history-search" placeholder="Search your queries..." style="background:transparent; border:none; color:#fff; outline:none; font-size:0.8rem; width:100%;" onkeyup="filterHistory()">
+                        </div>
+                        <select class="filter-select" id="history-topic" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #d1d5db; border-radius: 8px; ">
+                            <option value="all">All Topics</option>
+                        </select>
+                        <select class="filter-select" id="history-sort" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: #d1d5db; border-radius: 8px; ">
+                            <option value="newest">Newest First</option>
+                        </select>
+                    </div>
+
+                    <!-- List Container -->
+                    <div id="history-list-container" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-right: 4px;">
+                        <div style="text-align: center; color: #9ca3af; padding: 2rem;">Loading history...</div>
+                    </div>
+
+                </div>
+
+                <!-- Detail View (Right Column) -->
+                <div id="history-detail-container" style="flex: 1; background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(0, 210, 97, 0.1); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;">
+                    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #9ca3af;" id="detail-placeholder">
+                        <i data-lucide="message-square" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
+                        <p>Select a query from the left to view details.</p>
+                    </div>
+                    
+                    <div id="detail-content" style="display: none; flex-direction: column; height: 100%;">
+                        <!-- Dynamic Content will be injected here by JS -->
+                    </div>
+                </div>
+
+            </div>
+            
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="./js/api.js"></script>
-    <script src="./js/chat_history.js"></script>
+    <script src="./js/api.js?v=1791106279"></script>
+    <script src="./js/chat_history.js?v=1791106279"></script>
     <script>
-        lucide.createIcons();
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            } else {
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
-            }
         }
         
-        // Mock Auth check just to show user names
         document.addEventListener('DOMContentLoaded', async () => {
-            const user = await requireAuth();
-            if(user) {
-                document.getElementById('nav-name').textContent = user.name;
-                const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-                document.getElementById('nav-avatar').textContent = initials;
-                document.getElementById('nav-role').textContent = user.role;
-            }
+            await requireAuth();
+            if(window.lucide) { lucide.createIcons(); }
         });
     </script>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="index.html" class="bottom-nav-item" id="bnav-chat">
+            <i data-lucide="message-circle"></i>
+            <span>Chatbot</span>
+        </a>
+        <a href="chat_history.html" class="bottom-nav-item" id="bnav-history">
+            <i data-lucide="clock"></i>
+            <span>History</span>
+        </a>
+        <a href="documents.html" class="bottom-nav-item" id="bnav-docs">
+            <i data-lucide="book-open"></i>
+            <span>Docs</span>
+        </a>
+        <a href="live_updates.html" class="bottom-nav-item" id="bnav-updates">
+            <i data-lucide="megaphone"></i>
+            <span>Updates</span>
+        </a>
+        <a href="notifications.html" class="bottom-nav-item" id="bnav-notif">
+            <i data-lucide="bell"></i>
+            <span>Alerts</span>
+            <span class="bottom-nav-badge" id="bnav-badge" style="display:none;"></span>
+        </a>
+    </nav>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const path = window.location.pathname;
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if(path.includes('index.html') || path === '/' || path.endsWith('/')) document.getElementById('nav-chat')?.classList.add('active');
-            else if(path.includes('chat_history.html')) document.getElementById('nav-history')?.classList.add('active');
-            else if(path.includes('saved_answers.html')) document.getElementById('nav-saved')?.classList.add('active');
-            else if(path.includes('documents.html')) document.getElementById('nav-docs')?.classList.add('active');
-            else if(path.includes('document_viewer.html')) document.getElementById('nav-viewer')?.classList.add('active');
-            else if(path.includes('live_updates.html')) document.getElementById('nav-updates')?.classList.add('active');
-            else if(path.includes('notifications.html')) document.getElementById('nav-notifications')?.classList.add('active');
-            else if(path.includes('profile.html')) document.getElementById('nav-profile')?.classList.add('active');
-        });
+    // Activate bottom nav item based on current page
+    (function() {
+        var page = window.location.pathname.split('/').pop() || 'index.html';
+        var map = {
+            'index.html': 'bnav-chat',
+            'chat_history.html': 'bnav-history',
+            'documents.html': 'bnav-docs',
+            'live_updates.html': 'bnav-updates',
+            'notifications.html': 'bnav-notif',
+            'saved_answers.html': 'bnav-docs',
+            'profile.html': 'bnav-notif',
+            'admin.html': 'bnav-dashboard',
+            'admin_chatbot.html': 'bnav-chatbot',
+            'admin_documents.html': 'bnav-docs',
+            'admin_live_updates.html': 'bnav-updates',
+            'admin_users.html': 'bnav-users',
+        };
+        var active = map[page];
+        if (active) {
+            var el = document.getElementById(active);
+            if (el) el.classList.add('active');
+        }
+    })();
     </script>
-</body>
 
+</body>
 </html>

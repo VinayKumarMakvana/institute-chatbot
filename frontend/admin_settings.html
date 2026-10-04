@@ -6,10 +6,28 @@
     <title>Admin Dashboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://unpkg.com/lucide@latest">
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar, .chat-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (!sidebar) return;
+            const isOpen = sidebar.classList.contains('open');
+            if (isOpen) {
+                sidebar.classList.remove('open');
+                if (overlay) { overlay.classList.remove('show'); }
+                document.body.style.overflow = '';
+            } else {
+                sidebar.classList.add('open');
+                if (overlay) { overlay.classList.add('show'); }
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        </script>
     
-    <link rel="stylesheet" href="./css/globals.css">
-    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/globals.css?v=1791106279">
+    <link rel="stylesheet" href="./css/dashboard.css?v=1791106279">
+    <link rel="stylesheet" href="./css/responsive.css?v=1791106279">
     
 </head>
 <body class="dashboard-page">
@@ -21,21 +39,19 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
+            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
         </div>
         
         <div class="navbar-actions">
-            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
-                <i data-lucide="bell"></i>
-                <span class="badge" id="nav-badge-count">0</span>
-            </button>
-            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
-                <div class="user-avatar" id="nav-avatar">A</div>
+            
+            <div class="user-profile">
+                <div class="user-avatar" id="nav-avatar"></div>
                 <div class="user-info">
-                    <span class="user-name" id="nav-name">Admin User</span>
-                    <span class="user-role" id="nav-role">Super Admin</span>
+                    <span class="user-name" id="nav-name"></span>
+                    <span class="user-role" id="nav-role"></span>
                 </div>
             </div>
         </div>
@@ -57,7 +73,7 @@
             <div style="margin-top: auto;">
                 <div class="nav-divider"></div>
                 <ul class="nav-menu">
-                    <li><a href="admin_settings.html" class="nav-item" id="nav-settings"><i data-lucide="settings"></i> System Settings</a></li>
+                    
                     <li><a href="login.html" class="nav-item logout-btn" style="color: #ef4444;"><i data-lucide="log-out"></i> Logout</a></li>
                 </ul>
             </div>
@@ -91,21 +107,10 @@
     </div>
 
     <!-- Scripts -->
-    <script src="./js/api.js"></script>
-    <script src="./js/admin_settings.js"></script>
+    <script src="./js/api.js?v=1791106279"></script>
+    <script src="./js/admin_settings.js?v=1791106279"></script>
     <script>
         lucide.createIcons();
-        function toggleSidebar() {
-            const sidebar = document.querySelector('.sidebar');
-            const overlay = document.getElementById('sidebar-overlay');
-            if (sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            } else {
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
-            }
-        }
         
         // Mock Auth check just to show user names
         document.addEventListener('DOMContentLoaded', async () => {
@@ -114,7 +119,6 @@
                 document.getElementById('nav-name').textContent = user.name;
                 const initials = user.name.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
                 document.getElementById('nav-avatar').textContent = initials;
-                document.getElementById('nav-role').textContent = user.role;
             }
         });
     </script>
@@ -130,5 +134,56 @@
             else if(path.includes('admin.html')) document.getElementById('nav-admin')?.classList.add('active');
         });
     </script>
+
+    <!-- Bottom Navigation (Mobile Only) -->
+    <nav class="bottom-nav" id="bottom-nav">
+        <a href="admin.html" class="bottom-nav-item" id="bnav-dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="admin_chatbot.html" class="bottom-nav-item" id="bnav-chatbot">
+            <i data-lucide="bot"></i>
+            <span>Chatbot</span>
+        </a>
+        <a href="admin_documents.html" class="bottom-nav-item" id="bnav-docs">
+            <i data-lucide="file-text"></i>
+            <span>Docs</span>
+        </a>
+        <a href="admin_live_updates.html" class="bottom-nav-item" id="bnav-updates">
+            <i data-lucide="megaphone"></i>
+            <span>Updates</span>
+        </a>
+        <a href="admin_users.html" class="bottom-nav-item" id="bnav-users">
+            <i data-lucide="users"></i>
+            <span>Users</span>
+        </a>
+    </nav>
+
+    <script>
+    // Activate bottom nav item based on current page
+    (function() {
+        var page = window.location.pathname.split('/').pop() || 'index.html';
+        var map = {
+            'index.html': 'bnav-chat',
+            'chat_history.html': 'bnav-history',
+            'documents.html': 'bnav-docs',
+            'live_updates.html': 'bnav-updates',
+            'notifications.html': 'bnav-notif',
+            'saved_answers.html': 'bnav-docs',
+            'profile.html': 'bnav-notif',
+            'admin.html': 'bnav-dashboard',
+            'admin_chatbot.html': 'bnav-chatbot',
+            'admin_documents.html': 'bnav-docs',
+            'admin_live_updates.html': 'bnav-updates',
+            'admin_users.html': 'bnav-users',
+        };
+        var active = map[page];
+        if (active) {
+            var el = document.getElementById(active);
+            if (el) el.classList.add('active');
+        }
+    })();
+    </script>
+
 </body>
 </html>
