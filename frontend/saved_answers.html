@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Saved Answers</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -89,7 +90,7 @@
             <i data-lucide="graduation-cap" class="text-green"></i>
             Institution <span class="text-green">AI Assistant</span>
         </div>
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search your saved answers...">
@@ -143,7 +144,7 @@
                 </button>
             </div>
             
-            <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+            <div style="display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap;">
                 <div class="search-box" style="flex: 1; display:flex; align-items:center; background:rgba(2, 12, 6, 0.5); border:1px solid rgba(255,255,255,0.05); padding:10px 16px; border-radius:10px; gap:10px;">
                     <i data-lucide="search" style="width:18px; color:#9ca3af;"></i>
                     <input type="text" id="saved-search" placeholder="Search saved answers..." style="background:transparent; border:none; color:#fff; outline:none; font-size:0.9rem; width:100%;" onkeyup="filterSaved()">
@@ -166,8 +167,6 @@
     <script src="./js/api.js?v=1791106279"></script>
     <script src="./js/saved_answers.js?v=1791106279"></script>
     <script>
-        }
-        
         document.addEventListener('DOMContentLoaded', async () => {
             await requireAuth();
             if(window.lucide) { lucide.createIcons(); }
@@ -225,5 +224,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

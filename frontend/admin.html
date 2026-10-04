@@ -6,7 +6,8 @@
     <title>Admin Dashboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -39,7 +40,7 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
@@ -108,7 +109,7 @@
             </div>
 
             <!-- KPI Cards -->
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 24px;">
+            <div class="stats-grid admin-stats-grid">
                 <!-- Total Users -->
                 <div class="stat-card" style="padding: 12px; display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px;">
                     <div style="background: #3b82f6; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="users"></i></div>
@@ -166,7 +167,7 @@
             </div>
 
             <!-- Analytics & Categories -->
-            <div style="display: grid; grid-template-columns: 2fr 1.2fr; gap: 16px; margin-bottom: 24px;">
+            <div class="admin-two-col">
                 <!-- Chart -->
                 <div class="panel-card" style="position: relative;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -199,7 +200,7 @@
 
 
             <!-- Recent Activity Section -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+            <div class="grid-3-col" style="margin-bottom: 24px;">
                 <!-- Recent Users -->
                 <div class="panel-card" id="recent-users-panel">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
@@ -238,14 +239,14 @@
             </div>
 
             <!-- Bottom Section (System Status & Quick Actions) -->
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+            <div class="admin-two-col">
                 <!-- System Status -->
                 <div>
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                         <h3 style="font-size: 1rem; color: #fff; margin: 0;">System Status</h3>
                         <button class="btn-secondary" style="height: 30px; font-size: 0.75rem; padding: 0 10px; border:none;">View Details</button>
                     </div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                    <div class="stats-grid" style="gap: 10px;">
                         <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 8px;">
                             <span style="font-size: 0.75rem; color: #d1d5db; display: flex; align-items: center; gap: 6px;"><div style="width:8px; height:8px; border-radius:50%; background:#10b981;"></div> Chatbot Service</span>
                             <span style="font-size: 0.7rem; color: #10b981;">Operational</span>
@@ -268,7 +269,7 @@
                 <!-- Quick Actions -->
                 <div>
                     <h3 style="font-size: 1rem; color: #fff; margin: 0 0 12px 0;">Quick Actions</h3>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                    <div class="stats-grid" style="gap: 10px;">
                         <button onclick="window.location.href='admin_documents.html'" style="background: rgba(37, 99, 235, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="file-text" style="width:14px; height:14px;"></i> Upload PDF</button>
                         <button onclick="window.location.href='admin_chatbot.html'" style="background: rgba(16, 185, 129, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="settings" style="width:14px; height:14px;"></i> Manage Content</button>
                         <button onclick="window.scrollTo(0,0)" style="background: rgba(139, 92, 246, 0.9); border: none; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer; height:36px;"><i data-lucide="bar-chart-2" style="width:14px; height:14px;"></i> View Analytics</button>
@@ -289,7 +290,7 @@
     <script src="./js/api.js?v=1791106279"></script>
     <script src="./js/admin_dashboard.js?v=1791106279"></script>
     <script>
-        lucide.createIcons();
+        
         
         // Auth check is now global in api.js
         document.addEventListener('DOMContentLoaded', async () => {
@@ -359,5 +360,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

@@ -48,7 +48,7 @@ async function initChatApp() {
 
 async function fetchLatestUpdates() {
     try {
-        const res = await apiFetch('/updates'); // assuming endpoint exists, if not it will fail silently here
+        const res = await apiFetch('/live-updates'); // assuming endpoint exists, if not it will fail silently here
         const data = await res.json();
         const list = document.getElementById('latest-updates-list');
         list.innerHTML = '';

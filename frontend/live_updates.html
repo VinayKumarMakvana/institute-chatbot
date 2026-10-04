@@ -6,7 +6,8 @@
     <title>Live Updates & Announcements</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -41,7 +42,7 @@
             <i data-lucide="graduation-cap" class="text-green"></i>
             Institution <span class="text-green">AI Assistant</span>
         </div>
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search announcements, notices, or keywords...">
@@ -183,7 +184,9 @@
                 `;
             }).join('');
             
-            if(window.lucide) lucide.createIcons();
+            if (window.lucide) {
+                lucide.createIcons();
+            }
             
             // Auto open first if exists
             if(updates.length > 0) {
@@ -220,7 +223,6 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             await requireAuth();
-            if(window.lucide) { lucide.createIcons(); }
             fetchUpdates();
         });
     </script>
@@ -276,5 +278,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

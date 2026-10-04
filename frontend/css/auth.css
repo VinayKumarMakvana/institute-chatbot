@@ -452,7 +452,7 @@ form {
         width: 46px; height: 46px; min-width: 46px;
     }
     .input-group input, .input-group select {
-        height: 42px;
+        height: 44px;
         font-size: 0.85rem;
     }
 }

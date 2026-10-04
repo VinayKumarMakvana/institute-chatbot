@@ -24,7 +24,8 @@
 }
 
 html {
-    font-size: 16px;
+    /* Fluid typography: 14px at 320px screen width, up to 16px at 1920px screen width */
+    font-size: clamp(14px, 0.125vw + 13.6px, 16px);
 }
 
 body {
@@ -32,6 +33,14 @@ body {
     color: var(--text-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Touch Targets & Accessibility globally */
+button, a, input, select {
+    touch-action: manipulation;
 }
 
 /* Utilities */

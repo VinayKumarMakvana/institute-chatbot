@@ -6,7 +6,8 @@
     <title>Chat History</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -73,7 +74,7 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
@@ -127,9 +128,9 @@
                 </div>
             </div>
             
-            <div style="display: flex; gap: 1.5rem; flex: 1; overflow: hidden;">
+            <div style="display: flex; gap: 1.5rem; flex: 1; overflow-y: auto; overflow-x: hidden; flex-wrap: wrap; padding-bottom: 2rem;">
                 <!-- Master List (Left Column) -->
-                <div style="width: 45%; display: flex; flex-direction: column; gap: 1rem;">
+                <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 1rem;">
                     
                     <!-- Filters -->
                     <div style="display: flex; gap: 10px;">
@@ -153,7 +154,7 @@
                 </div>
 
                 <!-- Detail View (Right Column) -->
-                <div id="history-detail-container" style="flex: 1; background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(0, 210, 97, 0.1); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;">
+                <div id="history-detail-container" style="flex: 1; min-width: 280px; min-height: 400px; background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(0, 210, 97, 0.1); border-radius: 12px; display: flex; flex-direction: column; overflow: hidden;">
                     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: #9ca3af;" id="detail-placeholder">
                         <i data-lucide="message-square" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
                         <p>Select a query from the left to view details.</p>
@@ -172,8 +173,6 @@
     <script src="./js/api.js?v=1791106279"></script>
     <script src="./js/chat_history.js?v=1791106279"></script>
     <script>
-        }
-        
         document.addEventListener('DOMContentLoaded', async () => {
             await requireAuth();
             if(window.lucide) { lucide.createIcons(); }
@@ -231,5 +230,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

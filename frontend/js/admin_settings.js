@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-view-mode').addEventListener('click', () => renderViewMode());
 
     // Basic styling rules for the grids
-    const gridStyle = `display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; margin-bottom: 30px;`;
+    const gridClass = `profile-grid`;
     const cardStyle = `background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 24px; position: relative;`;
     const cardTitleStyle = `color: #fff; font-size: 1.1rem; font-weight: 600; margin: 0 0 20px 0; display: flex; justify-content: space-between; align-items: center;`;
 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         editHeader.style.display = 'none';
 
         container.innerHTML = `
-            <div style="${gridStyle}">
+            <div class="${gridClass}">
                 <!-- Profile Overview -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Profile Overview</h3>
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Account Information -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Account Information</h3>
-                    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px 10px; font-size: 0.85rem;">
+                    <div class="profile-row">
                         <div style="display:flex; align-items:center; gap:8px; color:#9ca3af;"><i data-lucide="user" style="width:16px; height:16px; color:#3b82f6;"></i> Full Name</div>
                         <div style="color:#fff;">${profileData.name}</div>
 
@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Personal Details -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Personal Details <button style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:6px;"><i data-lucide="edit-2" style="width:12px; height:12px;"></i> Edit</button></h3>
-                    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px 10px; font-size: 0.85rem;">
+                    <div class="profile-row">
                         <div style="display:flex; align-items:center; gap:8px; color:#9ca3af;"><i data-lucide="user" style="width:16px; height:16px; color:#3b82f6;"></i> Full Name</div>
                         <div style="color:#fff;">${profileData.name}</div>
 
@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Staff Information -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Staff Information <button style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:6px;"><i data-lucide="edit-2" style="width:12px; height:12px;"></i> Edit</button></h3>
-                    <div style="display: grid; grid-template-columns: 140px 1fr; gap: 12px 10px; font-size: 0.85rem;">
+                    <div class="profile-row">
                         <div style="display:flex; align-items:center; gap:8px; color:#9ca3af;"><i data-lucide="briefcase" style="width:16px; height:16px; color:#0ea5e9;"></i> Designation</div>
                         <div style="color:#fff;">${profileData.designation}</div>
 
@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Preferences -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Preferences <button style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:4px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:6px;"><i data-lucide="edit-2" style="width:12px; height:12px;"></i> Edit</button></h3>
-                    <div style="display: grid; grid-template-columns: 180px 1fr; gap: 16px 10px; font-size: 0.85rem; align-items:center;">
+                    <div class="profile-row-3">
                         <div style="display:flex; align-items:center; gap:8px; color:#9ca3af;"><i data-lucide="globe" style="width:16px; height:16px; color:#3b82f6;"></i> Preferred Language</div>
                         <div style="color:#fff;">English (Default)</div>
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Security & Access -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Security & Access</h3>
-                    <div style="display: grid; grid-template-columns: 180px 1fr auto; gap: 16px 10px; font-size: 0.85rem; align-items:center;">
+                    <div class="profile-row-3">
                         <div style="display:flex; align-items:center; gap:8px; color:#9ca3af;"><i data-lucide="lock" style="width:16px; height:16px; color:#64748b;"></i> Password</div>
                         <div style="color:#fff;">••••••••</div>
                         <button style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); color:#fff; padding:6px 12px; border-radius:6px; font-size:0.75rem; cursor:pointer; display:flex; align-items:center; gap:6px;"><i data-lucide="unlock" style="width:14px; height:14px;"></i> Change Password</button>
@@ -200,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const labelStyle = `display: block; color: #9ca3af; font-size: 0.8rem;`;
         
         container.innerHTML = `
-            <div style="${gridStyle}">
+            <div class="${gridClass}">
                 <!-- Profile Photo -->
                 <div style="${cardStyle} grid-column: span 1;">
                     <h3 style="${cardTitleStyle}">Profile Photo</h3>
@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 style="${cardTitleStyle}"><span style="display:flex; align-items:center; gap:8px;"><i data-lucide="user" style="color:#3b82f6;"></i> Personal Information</span></h3>
                     <p style="color:#9ca3af; font-size:0.8rem; margin-top:-15px; margin-bottom:20px;">Update your basic details.</p>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="profile-row-2">
                         <div><label style="${labelStyle}">Full Name <span style="color:#ef4444">*</span></label><input type="text" value="${profileData.name}" style="${inputStyle}"></div>
                         <div>
                             <label style="${labelStyle}">Email Address <span style="color:#ef4444">*</span></label>
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 style="${cardTitleStyle}"><span style="display:flex; align-items:center; gap:8px;"><i data-lucide="briefcase" style="color:#8b5cf6;"></i> Staff Information</span></h3>
                     <p style="color:#9ca3af; font-size:0.8rem; margin-top:-15px; margin-bottom:20px;">Update your professional details.</p>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="profile-row-2">
                         <div>
                             <label style="${labelStyle}">Designation <span style="color:#ef4444">*</span></label>
                             <input type="text" value="${profileData.designation}" style="${inputStyle}">
@@ -280,7 +280,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 style="${cardTitleStyle}"><span style="display:flex; align-items:center; gap:8px;"><i data-lucide="settings" style="color:#10b981;"></i> Preferences</span></h3>
                     <p style="color:#9ca3af; font-size:0.8rem; margin-top:-15px; margin-bottom:20px;">Set your administrative preferences.</p>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div class="profile-row-2" style="margin-bottom: 20px;">
                         <div>
                             <label style="${labelStyle}">Preferred Language <span style="color:#ef4444">*</span></label>
                             <select style="${inputStyle}">
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <h3 style="${cardTitleStyle}"><span style="display:flex; align-items:center; gap:8px;"><i data-lucide="lock" style="color:#f59e0b;"></i> Security</span></h3>
                         <p style="color:#9ca3af; font-size:0.8rem; margin-top:-15px; margin-bottom:20px;">Manage your admin account security.</p>
                         
-                        <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+                        <div style="display: flex; flex-direction: column; gap: 15px;">
                             <div style="position:relative;">
                                 <label style="${labelStyle}">Current Password</label>
                                 <input type="password" placeholder="Enter current password" style="${inputStyle}">

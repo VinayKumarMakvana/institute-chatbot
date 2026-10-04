@@ -47,8 +47,9 @@ body.dashboard-page {
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #fff;
     border-radius: 6px;
-    padding: 6px 12px 6px 36px;
-    font-size: 0.75rem;
+    padding: 10px 12px 10px 36px; /* increased padding for touch */
+    min-height: 44px; /* touch target */
+    font-size: 0.85rem;
     font-family: inherit;
     outline: none;
     transition: all 0.2s;
@@ -76,10 +77,11 @@ body.dashboard-page {
 .icon-action-btn {
     background: none; border: none; color: #9ca3af; cursor: pointer;
     position: relative; display: flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px; /* Touch target */
     transition: color 0.2s;
 }
 .icon-action-btn:hover { color: #fff; }
-.icon-action-btn svg.lucide { width: 16px !important; height: 16px !important; }
+.icon-action-btn svg.lucide { width: 20px !important; height: 20px !important; }
 .icon-action-btn .badge {
     position: absolute; top: -4px; right: -4px;
     background: #ef4444; color: #fff; font-size: 0.55rem; font-weight: bold;
@@ -182,9 +184,10 @@ body.dashboard-page {
 .help-widget p { margin: 0 0 10px 0; font-size: 0.65rem; color: #9ca3af; line-height: 1.3; }
 .btn-green {
     background: #00D261; color: #000; border: none;
-    padding: 6px 12px; border-radius: 4px; font-size: 0.7rem; font-weight: 600;
+    padding: 10px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+    min-height: 44px; /* touch target */
     cursor: pointer; width: 100%; transition: background 0.2s;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .btn-green:hover { background: #00b050; }
 
@@ -266,6 +269,19 @@ body.dashboard-page {
 .content-grid {
     display: grid;
     grid-template-columns: 1fr 280px;
+    gap: 1.5rem;
+}
+
+/* Admin Grid Layouts */
+.admin-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.admin-sidebar-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
     gap: 1.5rem;
 }
 
@@ -449,8 +465,9 @@ body.dashboard-page {
     background: rgba(2, 12, 6, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto; /* Allow horizontal scroll on tablet/desktop if needed */
     width: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 .data-table {
     width: 100%;
@@ -600,10 +617,10 @@ body.dashboard-page {
 select.filter-select {
     width: auto;
     min-width: 120px;
-    height: 36px;
-    min-height: 36px;
+    height: 44px; /* Touch target */
+    min-height: 44px;
     padding: 0 10px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 .filters-bar .action-btn-icon {
@@ -766,4 +783,38 @@ input:checked + .slider { background-color: rgba(0, 210, 97, 0.2); }
 input:checked + .slider:before {
     background-color: #00D261;
     transform: translateX(20px);
+}
+
+/* Profile and Settings Grids (Injected via JS) */
+.profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.profile-edit-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.profile-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 12px 10px;
+    font-size: 0.85rem;
+    align-items: center;
+}
+.profile-row-3 {
+    display: grid;
+    grid-template-columns: 180px 1fr auto;
+    gap: 16px 10px;
+    font-size: 0.85rem;
+    align-items: center;
+}
+.profile-row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }

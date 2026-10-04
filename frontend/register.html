@@ -25,6 +25,11 @@
             gap: 10px;
             margin-bottom: 10px;
         }
+        @media (max-width: 767px) {
+            .reg-grid {
+                grid-template-columns: 1fr;
+            }
+        }
 
         .reg-field label {
             display: block;
@@ -363,7 +368,7 @@
 
     <!-- Scripts -->
     <script>
-        lucide.createIcons();
+        
         function togglePwd(inputId, iconEl) {
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
@@ -373,7 +378,7 @@
                 input.type = 'password';
                 iconEl.setAttribute('data-lucide', 'eye-off');
             }
-            lucide.createIcons();
+            
         }
         document.head.insertAdjacentHTML("beforeend", `<style>
             .input-group .input-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
@@ -382,6 +387,9 @@
     </script>
     <script src="./js/api.js?v=1791106279"></script>
     <script src="./js/auth.js?v=1791106279"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 
 </html>

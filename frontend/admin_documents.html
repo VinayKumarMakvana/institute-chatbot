@@ -6,7 +6,8 @@
     <title>Document Management</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -135,7 +136,7 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
@@ -199,7 +200,7 @@
             </div>
             
             <!-- KPI Cards -->
-            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 24px;">
+            <div class="stats-grid admin-stats-grid" style="margin-bottom: 24px;">
                 <div class="stat-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 16px;">
                     <div style="background: #3b82f6; color: #fff; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="book-open"></i></div>
                     <div style="display: flex; flex-direction: column;">
@@ -393,9 +394,7 @@
 
     <script src="./js/api.js"></script>
     <script src="./js/admin_documents.js"></script>
-    <script>
-        lucide.createIcons();
-    </script>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -459,5 +458,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

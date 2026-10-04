@@ -6,7 +6,8 @@
     <title>Chatbot Management</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -39,7 +40,7 @@
             Institution <span class="text-green">AI Assistant</span>
         </div>
         
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search...">
@@ -106,7 +107,7 @@
     </div>
 
     <!-- KPI Cards Grid -->
-    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+    <div class="stats-grid admin-stats-grid" style="margin-bottom: 20px;">
         <div class="stat-card" style="padding: 12px; flex-direction: row; align-items: center; gap: 12px;">
             <div style="width: 36px; height: 36px; background: #10b981; border-radius: 8px; display: flex; align-items: center; justify-content: center;"><div style="width: 12px; height: 12px; background: #fff; border-radius: 50%;"></div></div>
             <div style="display: flex; flex-direction: column;"><span style="font-size: 0.7rem; color: #9ca3af;">Status</span><span style="font-weight: 700; color: #fff;">Online</span></div>
@@ -126,9 +127,9 @@
     </div>
 
     <!-- Main Layout -->
-    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px; padding-bottom: 80px;">
+    <div class="admin-sidebar-grid" style="padding-bottom: 80px;">
         <!-- Left: Settings Form (2 columns) -->
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-content: start;">
+        <div class="admin-two-col" style="align-content: start;">
             
             <!-- Col 1 -->
             <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -405,7 +406,7 @@
     <script src="./js/api.js?v=1791106279"></script>
     <script src="./js/admin_chatbot.js?v=1791106279"></script>
     <script>
-        lucide.createIcons();
+        
         
         // Mock Auth check just to show user names
         document.addEventListener('DOMContentLoaded', async () => {
@@ -480,5 +481,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

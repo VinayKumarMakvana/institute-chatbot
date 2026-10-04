@@ -6,7 +6,8 @@
     <title>Documents Library</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
         function toggleSidebar() {
             const sidebar = document.querySelector('.sidebar, .chat-sidebar');
             const overlay = document.getElementById('sidebar-overlay');
@@ -41,7 +42,7 @@
             <i data-lucide="graduation-cap" class="text-green"></i>
             Institution <span class="text-green">AI Assistant</span>
         </div>
-            <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
+            
         <div class="navbar-search">
             <i data-lucide="search" class="search-icon"></i>
             <input type="text" placeholder="Search documents, subjects, or topics...">
@@ -96,10 +97,10 @@
             <div style="display: flex; gap: 1.5rem; flex-wrap: wrap;">
                 
                 <!-- Left Column: List -->
-                <div style="flex: 2; min-width: 500px; display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="flex: 2; min-width: 280px; display: flex; flex-direction: column; gap: 1.5rem;">
                     
                     <!-- Documents List -->
-                    <div style="background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; flex: 1;">
+                    <div style="background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1.5rem; flex: 1; overflow: hidden;">
                         <div style="display: flex; gap: 10px; margin-bottom: 1.5rem;">
                             <div class="search-box" style="flex: 1; display:flex; align-items:center; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:4px 10px; height: 36px; border-radius:8px; gap:8px;">
                                 <i data-lucide="search" style="width:16px; color:#9ca3af;"></i>
@@ -112,25 +113,27 @@
                             </select>
                         </div>
                         
-                        <table class="data-table" style="width: 100%; border-collapse: collapse;">
-                            <thead>
-                                <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #9ca3af; font-size: 0.75rem; text-align: left;">
-                                    <th style="padding: 12px 8px; width: 40px;">#</th>
-                                    <th style="padding: 12px 8px;">Document Name</th>
-                                    <th style="padding: 12px 8px;">Category</th>
-                                    <th style="padding: 12px 8px;">Added On</th>
-                                    <th style="padding: 12px 8px; text-align: right;">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody id="docs-table-body">
-                                <tr><td colspan="5" style="text-align:center; padding: 2rem; color: #9ca3af;">Loading documents...</td></tr>
-                            </tbody>
-                        </table>
+                        <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; width: 100%; padding-bottom: 8px;">
+                            <table class="data-table" style="width: 100%; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); color: #9ca3af; font-size: 0.75rem; text-align: left;">
+                                        <th style="padding: 12px 8px; width: 40px;">#</th>
+                                        <th style="padding: 12px 8px;">Document Name</th>
+                                        <th style="padding: 12px 8px;">Category</th>
+                                        <th style="padding: 12px 8px;">Added On</th>
+                                        <th style="padding: 12px 8px; text-align: right;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="docs-table-body">
+                                    <tr><td colspan="5" style="text-align:center; padding: 2rem; color: #9ca3af;">Loading documents...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Right Column: Detail View -->
-                <div style="flex: 1; min-width: 350px; display: flex; flex-direction: column; gap: 1.5rem;">
+                <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 1.5rem;">
                     
                     <div id="detail-placeholder" style="background: rgba(2, 12, 6, 0.5); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #9ca3af; text-align: center; height: 100%;">
                         <i data-lucide="file-search" style="width: 48px; height: 48px; margin-bottom: 1rem; opacity: 0.5;"></i>
@@ -243,7 +246,7 @@
                     </tr>
                 `;
             }).join('');
-            if(window.lucide) lucide.createIcons();
+            if(window.lucide) { lucide.createIcons(); }
         }
 
         function showDetail(docId) {
@@ -265,7 +268,6 @@
             let text = doc.extracted_text || 'No text extracted.';
             let previewWords = text.split(' ').slice(0, 30).join(' ') + '...';
             document.getElementById('det-preview').innerHTML = `<div style="background:rgba(255,255,255,0.03); padding:8px; border-radius:6px; font-style:italic;">"${previewWords}"</div>`;
-        }
         }
         
         document.addEventListener('DOMContentLoaded', async () => {
@@ -326,5 +328,8 @@
     })();
     </script>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>

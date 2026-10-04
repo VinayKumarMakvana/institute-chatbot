@@ -14,12 +14,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-edit-mode').addEventListener('click', () => { currentEditTab = 'basic'; renderEditMode(); });
     document.getElementById('btn-view-mode').addEventListener('click', () => renderViewMode());
 
-    const gridStyle = `display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; max-width: 1300px; margin-left: auto; margin-right: auto;`;
-    const editGridStyle = `display: grid; grid-template-columns: 250px 1fr; gap: 20px; max-width: 1000px; margin: 0 auto;`; 
+    const gridClass = `profile-grid`;
+    const editGridClass = `profile-edit-grid`;
     const cardStyle = `background: rgba(2, 12, 6, 0.6); border: 1px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 16px; position: relative; display: flex; flex-direction: column;`;
     const cardTitleStyle = `color: #fff; font-size: 0.95rem; font-weight: 600; margin: 0 0 16px 0; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 8px;`;
 
-    const rowStyle = `display: grid; grid-template-columns: 130px 1fr; gap: 8px; font-size: 0.75rem; align-items: start; margin-bottom: 10px;`;
+    const rowClass = `profile-row`;
     const labelColStyle = `display:flex; align-items:center; gap:6px; color:#9ca3af;`;
     const valColStyle = `color:#fff; line-height: 1.4;`;
 
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         editHeader.style.display = 'none';
 
         container.innerHTML = `
-            <div style="${gridStyle}">
+            <div class="${gridClass}">
                 
                 <!-- Profile Overview -->
                 <div style="${cardStyle}">
@@ -82,30 +82,30 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Account Information -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Account Details</h3>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="user" style="width:14px; height:14px; color:#3b82f6;"></i> Full Name</div>
                         <div style="${valColStyle}">${profileData.name}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="at-sign" style="width:14px; height:14px; color:#3b82f6;"></i> Username</div>
                         <div style="${valColStyle}">${profileData.username}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="mail" style="width:14px; height:14px; color:#10b981;"></i> Email</div>
                         <div style="${valColStyle}; display:flex; justify-content:space-between; align-items:center;">
                             <span style="overflow:hidden; text-overflow:ellipsis;">${profileData.email}</span>
                             <span style="background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 2px 6px; border-radius: 10px; font-size: 0.65rem;"><i data-lucide="check" style="width:8px; height:8px;"></i> Verified</span>
                         </div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="shield" style="width:14px; height:14px; color:#f59e0b;"></i> Account Type</div>
                         <div style="${valColStyle}">${profileData.role}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="calendar" style="width:14px; height:14px; color:#8b5cf6;"></i> Registered</div>
                         <div style="${valColStyle}">${profileData.regDate}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="clock" style="width:14px; height:14px; color:#ec4899;"></i> Last Login</div>
                         <div style="${valColStyle}">${profileData.lastLogin}</div>
                     </div>
@@ -114,23 +114,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Personal Details -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Personal Details <button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:2px 8px; border-radius:4px; font-size:0.7rem; cursor:pointer; display:flex; align-items:center; gap:4px;" onclick="switchEditTab('basic')"><i data-lucide="edit-2" style="width:10px; height:10px;"></i> Edit</button></h3>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="calendar" style="width:14px; height:14px; color:#ef4444;"></i> Date of Birth</div>
                         <div style="${valColStyle}">${profileData.dob}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="users" style="width:14px; height:14px; color:#10b981;"></i> Gender</div>
                         <div style="${valColStyle}">${profileData.gender}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="smartphone" style="width:14px; height:14px; color:#0ea5e9;"></i> Mobile</div>
                         <div style="${valColStyle}">${profileData.mobile}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="map-pin" style="width:14px; height:14px; color:#f59e0b;"></i> Location</div>
                         <div style="${valColStyle}">${profileData.location}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="file-text" style="width:14px; height:14px; color:#8b5cf6; margin-top:2px;"></i> Bio</div>
                         <div style="${valColStyle}">${profileData.bio}</div>
                     </div>
@@ -139,27 +139,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Academic Information -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Academic Info <button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:2px 8px; border-radius:4px; font-size:0.7rem; cursor:pointer; display:flex; align-items:center; gap:4px;" onclick="switchEditTab('academic')"><i data-lucide="edit-2" style="width:10px; height:10px;"></i> Edit</button></h3>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="graduation-cap" style="width:14px; height:14px; color:#0ea5e9;"></i> Course</div>
                         <div style="${valColStyle}">${profileData.course}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="book-open" style="width:14px; height:14px; color:#8b5cf6;"></i> Semester</div>
                         <div style="${valColStyle}">${profileData.semester}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="hash" style="width:14px; height:14px; color:#10b981;"></i> Enrollment</div>
                         <div style="${valColStyle}">${profileData.enrollment}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="building" style="width:14px; height:14px; color:#3b82f6;"></i> Department</div>
                         <div style="${valColStyle}">${profileData.dept}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="calendar" style="width:14px; height:14px; color:#64748b;"></i> Session</div>
                         <div style="${valColStyle}">${profileData.session}</div>
                     </div>
-                    <div style="${rowStyle}">
+                    <div class="${rowClass}" style="margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="library" style="width:14px; height:14px; color:#f59e0b;"></i> Institute</div>
                         <div style="${valColStyle}">${profileData.institute}</div>
                     </div>
@@ -168,19 +168,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <!-- Preferences -->
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Preferences <button style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#9ca3af; padding:2px 8px; border-radius:4px; font-size:0.7rem; cursor:pointer; display:flex; align-items:center; gap:4px;" onclick="switchEditTab('preferences')"><i data-lucide="edit-2" style="width:10px; height:10px;"></i> Edit</button></h3>
-                    <div style="${rowStyle} align-items:center;">
+                    <div class="${rowClass}" style="align-items:center; margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="globe" style="width:14px; height:14px; color:#3b82f6;"></i> Language</div>
                         <div style="${valColStyle}">English</div>
                     </div>
-                    <div style="${rowStyle} align-items:center;">
+                    <div class="${rowClass}" style="align-items:center; margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="moon" style="width:14px; height:14px; color:#8b5cf6;"></i> Theme</div>
                         <div style="${valColStyle}">Dark</div>
                     </div>
-                    <div style="${rowStyle} align-items:center;">
+                    <div class="${rowClass}" style="align-items:center; margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="message-square" style="width:14px; height:14px; color:#10b981;"></i> Answer Style</div>
                         <div style="${valColStyle}">Detailed Explanation</div>
                     </div>
-                    <div style="${rowStyle} align-items:center;">
+                    <div class="${rowClass}" style="align-items:center; margin-bottom: 10px;">
                         <div style="${labelColStyle}"><i data-lucide="link" style="width:14px; height:14px; color:#0ea5e9;"></i> Source Links</div>
                         <div style="${valColStyle}">
                             <div style="width:30px; height:16px; background:#00D261; border-radius:10px; position:relative;">
@@ -240,7 +240,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                             <div style="font-size:0.7rem; color:#6b7280;">JPG, PNG (Max 2MB)</div>
                         </div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="profile-row-2">
                         <div><label style="${labelStyle}">Full Name <span style="color:#ef4444">*</span></label><input type="text" value="${profileData.name}" style="${inputStyle}"></div>
                         <div>
                             <label style="${labelStyle}">Email Address</label>
@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             rightContent = `
                 <div style="${cardStyle}">
                     <h3 style="${cardTitleStyle}">Academic Information</h3>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="profile-row-2">
                         <div style="grid-column: span 2;"><label style="${labelStyle}">Course Name</label><input type="text" value="${profileData.course}" style="${inputStyle}"></div>
                         <div>
                             <label style="${labelStyle}">Semester / Year</label>
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         container.innerHTML = `
-            <div style="${editGridStyle}">
+            <div class="${editGridClass}">
                 <!-- Left Sidebar Navigation for Edit Mode -->
                 <div style="display: flex; flex-direction: column; gap: 8px;">
                     <div onclick="switchEditTab('basic')" style="${tabStyle('basic')}">

@@ -52,7 +52,7 @@ function resetForm() {
 
 async function fetchUpdates() {
     try {
-        const res = await apiFetch('/live_updates/admin');
+        const res = await apiFetch('/live-updates/admin');
         const data = await res.json();
         if(data.success) {
             updatesData = data.data;
@@ -179,12 +179,12 @@ async function saveAnnouncement(publishNow = false) {
     try {
         let res;
         if(id) {
-            res = await apiFetch('/live_updates/' + id, {
+            res = await apiFetch('/live-updates/' + id, {
                 method: 'PUT',
                 body: JSON.stringify(payload)
             });
         } else {
-            res = await apiFetch('/live_updates', {
+            res = await apiFetch('/live-updates', {
                 method: 'POST',
                 body: JSON.stringify(payload)
             });
@@ -211,7 +211,7 @@ async function saveAnnouncement(publishNow = false) {
 async function publishUpdate(id, doFetch = true) {
     if(!confirm("Are you sure you want to publish this announcement? Users may be notified.")) return;
     try {
-        const res = await apiFetch('/live_updates/' + id + '/publish', { method: 'POST' });
+        const res = await apiFetch('/live-updates/' + id + '/publish', { method: 'POST' });
         if(res.ok) {
             // Trigger push notification to all users
             localStorage.setItem('trigger_push_notification', JSON.stringify({
@@ -237,7 +237,7 @@ async function publishUpdate(id, doFetch = true) {
 async function unpublishUpdate(id) {
     if(!confirm("Are you sure you want to unpublish this announcement?")) return;
     try {
-        const res = await apiFetch('/live_updates/' + id + '/unpublish', { method: 'POST' });
+        const res = await apiFetch('/live-updates/' + id + '/unpublish', { method: 'POST' });
         if(res.ok) await fetchUpdates();
     } catch (e) {
         console.error(e);
@@ -247,7 +247,7 @@ async function unpublishUpdate(id) {
 async function deleteUpdate(id) {
     if(!confirm("Are you sure you want to delete this announcement? This cannot be undone.")) return;
     try {
-        const res = await apiFetch('/live_updates/' + id, { method: 'DELETE' });
+        const res = await apiFetch('/live-updates/' + id, { method: 'DELETE' });
         if(res.ok) await fetchUpdates();
     } catch (e) {
         console.error(e);
