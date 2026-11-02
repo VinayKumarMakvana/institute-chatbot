@@ -3,6 +3,7 @@ import shutil
 import uuid
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
+from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from datetime import datetime, timezone
@@ -35,7 +36,8 @@ async def upload_document(
 ):
     if not file.filename.lower().endswith('.pdf'):
         raise HTTPException(status_code=400, detail="Only PDF files are allowed")
-    if file.content_type != "application/pdf":
+    valid_mimes = ["application/pdf", "application/x-pdf", "application/acrobat", "applications/vnd.pdf", "text/pdf", "text/x-pdf", "application/octet-stream"]
+    if file.content_type and file.content_type not in valid_mimes:
         raise HTTPException(status_code=400, detail="Invalid MIME type")
         
     os.makedirs(settings.DOCUMENT_STORAGE_PATH, exist_ok=True)
@@ -105,6 +107,30 @@ async def get_document(document_id: str, current_admin: UserResponse = Depends(d
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     return StandardResponse(success=True, message="Document retrieved.", data=_map_doc_response(doc))
+
+@router.get("/{document_id}/file")
+async def get_document_file(
+    document_id: str,
+    current_user: UserResponse = Depends(deps.get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(select(DocumentDB).where(DocumentDB.id == document_id))
+    doc = result.scalar_one_or_none()
+    if not doc:
+        raise HTTPException(status_code=404, detail="Document not found")
+        
+    if current_user.role != "ADMIN" and doc.status != "READY":
+        raise HTTPException(status_code=403, detail="Document is not ready for viewing")
+        
+    if not os.path.exists(doc.file_path):
+        raise HTTPException(status_code=404, detail="Physical file missing on server")
+        
+    return FileResponse(
+        path=doc.file_path,
+        filename=doc.original_filename,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'inline; filename="{doc.original_filename}"'}
+    )
 
 @router.delete("/{document_id}", response_model=StandardResponse[None])
 async def delete_document(document_id: str, current_admin: UserResponse = Depends(deps.require_admin), db: AsyncSession = Depends(get_db)):

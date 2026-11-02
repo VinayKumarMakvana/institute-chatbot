@@ -25,9 +25,8 @@ async function fetchUsers() {
 }
 
 function mapBackendToFrontend(n, index) {
-    // Map backend data using real values (removing fake assignments)
     let mappedRole = n.role === 'ADMIN' ? 'Super Admin' : (n.role === 'FACULTY' ? 'Faculty' : 'Student');
-    let mappedDept = '-'; // Not tracked in DB yet
+    let mappedDept = n.department || n.course || '-';
     let mappedStatus = n.is_active ? 'Active' : 'Inactive';
 
     const dateObj = new Date(n.last_login_at ? n.last_login_at + 'Z' : n.created_at + 'Z'); 
@@ -41,6 +40,7 @@ function mapBackendToFrontend(n, index) {
         role: mappedRole,
         department: mappedDept,
         status: mappedStatus,
+        isActive: n.is_active,
         lastActive: dateStr
     };
 }
@@ -112,10 +112,13 @@ function renderUsers(users) {
                 <td>${statusHtml}</td>
                 <td style="color: #9ca3af;">${u.lastActive}</td>
                 <td style="text-align: right;">
-                    <div class="action-buttons" style="justify-content: flex-end; gap:4px;">
-                        <button class="action-btn-icon" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 6px;"><i data-lucide="eye" style="width:14px; height:14px;"></i></button>
-                        <button class="action-btn-icon" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 6px;"><i data-lucide="edit-2" style="width:14px; height:14px;"></i></button>
-                        <button class="action-btn-icon" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 6px;"><i data-lucide="more-horizontal" style="width:14px; height:14px;"></i></button>
+                    <div class="action-buttons" style="justify-content: flex-end; gap:6px;">
+                        <button class="action-btn-icon" onclick="toggleUserStatus('${u.id}', ${u.isActive})" title="${u.isActive ? 'Deactivate User' : 'Activate User'}" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 6px; color: ${u.isActive ? '#f59e0b' : '#10b981'}; cursor:pointer;">
+                            <i data-lucide="${u.isActive ? 'user-x' : 'user-check'}" style="width:14px; height:14px;"></i>
+                        </button>
+                        <button class="action-btn-icon" onclick="deleteUser('${u.id}', '${u.name}')" title="Delete User" style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); padding: 6px; color: #ef4444; cursor:pointer;">
+                            <i data-lucide="trash-2" style="width:14px; height:14px;"></i>
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -128,6 +131,40 @@ function renderUsers(users) {
         lucide.createIcons();
     }
 }
+
+window.toggleUserStatus = async function(id, currentActive) {
+    try {
+        const res = await apiFetch(`/users/${id}/status`, {
+            method: 'PUT',
+            body: JSON.stringify({ is_active: !currentActive })
+        });
+        const data = await res.json();
+        if(data.success) {
+            await fetchUsers();
+        } else {
+            alert('Failed to update status');
+        }
+    } catch(e) {
+        console.error(e);
+        alert('Error updating status');
+    }
+};
+
+window.deleteUser = async function(id, name) {
+    if(!confirm(`Are you sure you want to delete user "${name}"?`)) return;
+    try {
+        const res = await apiFetch(`/users/${id}`, { method: 'DELETE' });
+        const data = await res.json();
+        if(data.success) {
+            await fetchUsers();
+        } else {
+            alert('Failed to delete user');
+        }
+    } catch(e) {
+        console.error(e);
+        alert('Error deleting user');
+    }
+};
 
 function filterUsers() {
     const query = document.getElementById('user-search').value.toLowerCase();

@@ -86,20 +86,22 @@ async def edit_live_update(
     await db.refresh(update)
     return StandardResponse(success=True, message="Update edited", data=_map_update(update))
 
-async def _create_notifications(update_id: str, title: str):
+async def _create_notifications(update_id: str, title: str, category: str = "General", content: str = ""):
     # This should be called in background task. Needs own session.
     from app.db.sqlite import AsyncSessionLocal
     async with AsyncSessionLocal() as db:
         result = await db.execute(select(UserDB).where(UserDB.is_active == True, UserDB.role == "USER"))
         users = result.scalars().all()
         now = utc_now()
+        notif_title = f"Announcement: {category}" if category else "College Announcement"
+        msg = f"{title} - {content[:120]}" if content else title
         notifications = []
         for u in users:
             notifications.append(NotificationDB(
                 user_id=u.id,
-                type="SYSTEM_UPDATE",
-                title="New Platform Update",
-                message=title,
+                type="ANNOUNCEMENT",
+                title=notif_title,
+                message=msg,
                 update_id=update_id,
                 is_read=False,
                 created_at=now
@@ -130,7 +132,7 @@ async def publish_live_update(
     await db.commit()
     await db.refresh(update)
     
-    background_tasks.add_task(_create_notifications, update_id, update.title)
+    background_tasks.add_task(_create_notifications, update_id, update.title, update.category or "General", update.content or "")
     
     return StandardResponse(success=True, message="Update published and notifications dispatched", data=_map_update(update))
 

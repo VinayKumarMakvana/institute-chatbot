@@ -14,12 +14,13 @@ class Settings(BaseSettings):
 
     AI_PROVIDER: str = "mock"
     AI_API_KEY: str = ""
+    LLM_MODEL: str = "gemini-3.5-flash-lite"
     
     DOCUMENT_STORAGE_PATH: str = "uploads"
     MAX_PDF_SIZE_MB: int = 10
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200
-    EMBEDDING_MODEL: str = "models/text-embedding-004"
+    EMBEDDING_MODEL: str = "gemini-embedding-001"
     VECTOR_INDEX_PATH: str = "vectorstore"
 
     RAG_TOP_K: int = 5

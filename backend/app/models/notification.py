@@ -14,4 +14,5 @@ class NotificationResponse(BaseModel):
     read_at: Optional[datetime] = None
 
 class UnreadCountResponse(BaseModel):
-    count: int
+    count: int = 0
+    unread_count: int = 0

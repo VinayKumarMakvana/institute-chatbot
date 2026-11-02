@@ -1,7 +1,9 @@
 import logging
+import os
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from app.core.config import settings
@@ -27,9 +29,19 @@ app = FastAPI(
 )
 
 # CORS Middleware
+origins = list(set([
+    settings.FRONTEND_URL,
+    settings.BACKEND_URL,
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "*"
+]))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.FRONTEND_URL],
+    allow_origins=origins if settings.APP_ENV == "production" and settings.FRONTEND_URL != "*" else ["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -42,7 +54,15 @@ async def add_security_headers(request: Request, call_next):
     response.headers["X-Frame-Options"] = "DENY"
     response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-    response.headers["Content-Security-Policy"] = "default-src 'self'; img-src 'self' data:; connect-src 'self' http://localhost:8000; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';"
+    csp_connect = f"'self' {settings.FRONTEND_URL} {settings.BACKEND_URL} http://localhost:8000 http://127.0.0.1:8000 http://localhost:5500 http://127.0.0.1:5500 https: http: ws: wss:"
+    response.headers["Content-Security-Policy"] = (
+        f"default-src 'self' data: https:; "
+        f"img-src 'self' data: https:; "
+        f"connect-src {csp_connect}; "
+        f"script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; "
+        f"style-src 'self' 'unsafe-inline' https:; "
+        f"font-src 'self' data: https:;"
+    )
     response.headers["Permissions-Policy"] = "geolocation=(), microphone=(), camera=()"
     return response
 
@@ -61,6 +81,12 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # Routers
 app.include_router(api_router, prefix="/api/v1")
+
+# Mount Static Frontend (Serves UI directly if frontend folder is present)
+frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "frontend"))
+if os.path.exists(frontend_dir):
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+    logger.info(f"Mounted static frontend from {frontend_dir}")
 
 if __name__ == "__main__":
     import uvicorn

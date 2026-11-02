@@ -20,16 +20,25 @@ class LLMProvider:
             return "This is a mock answer generated using the retrieved context."
             
         elif self.provider == "gemini" and self.client:
-            try:
-                full_prompt = f"{system_instruction}\n\n{prompt}"
-                response = self.client.models.generate_content(
-                    model='gemini-1.5-flash',
-                    contents=full_prompt
-                )
-                return response.text
-            except Exception as e:
-                logger.error(f"Gemini generation failed: {e}")
-                raise Exception("The AI service is temporarily unavailable. Please try again.")
+            models_to_try = [
+                settings.LLM_MODEL,
+                "gemini-3-flash-preview",
+                "gemini-3.5-flash"
+            ]
+            full_prompt = f"{system_instruction}\n\n{prompt}"
+            last_err = None
+            for model_name in models_to_try:
+                try:
+                    response = self.client.models.generate_content(
+                        model=model_name,
+                        contents=full_prompt
+                    )
+                    return response.text
+                except Exception as e:
+                    logger.warning(f"Gemini model {model_name} failed: {e}")
+                    last_err = e
+            logger.error(f"All Gemini generation models failed: {last_err}")
+            raise Exception("The AI service is temporarily unavailable. Please try again.")
         else:
             raise Exception("Unsupported or unconfigured LLM provider")
 

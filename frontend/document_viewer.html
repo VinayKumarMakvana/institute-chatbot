@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Document Viewer - Institution AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="./css/globals.css">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/responsive.css">
+    <style>
+        .viewer-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 70px);
+            padding: 1.5rem;
+            gap: 1rem;
+        }
+        .viewer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(2, 12, 6, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px 20px;
+        }
+        .pdf-frame {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: #1e1e1e;
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <nav class="top-navbar">
+        <div class="navbar-brand">
+            <i data-lucide="graduation-cap" class="text-green"></i>
+            Institution <span class="text-green">AI Assistant</span>
+        </div>
+        <div class="navbar-actions">
+            <button class="icon-action-btn" onclick="window.location.href='notifications.html'">
+                <i data-lucide="bell"></i>
+                <span class="badge" id="nav-badge-count">0</span>
+            </button>
+            <div class="user-profile" onclick="window.location.href='profile.html'" style="cursor:pointer;">
+                <div class="user-avatar" id="nav-avatar"></div>
+                <div class="user-info">
+                    <span class="user-name" id="nav-name"></span>
+                    <span class="user-role" id="nav-role"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="viewer-container">
+        <div class="viewer-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <a href="documents.html" class="btn-outline" style="text-decoration:none; display:flex; align-items:center; gap:6px; padding:6px 12px; font-size:0.8rem;">
+                    <i data-lucide="arrow-left" style="width:14px; height:14px;"></i> Back to Library
+                </a>
+                <h3 id="doc-title" style="color:#fff; margin:0; font-size:1rem; font-weight:600;">Loading PDF...</h3>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+                <a id="btn-download" href="#" target="_blank" class="btn-outline" style="text-decoration:none; display:flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.8rem; color:#60a5fa; border-color:rgba(96,165,250,0.3);">
+                    <i data-lucide="download" style="width:14px; height:14px;"></i> Download PDF
+                </a>
+                <a href="index.html" class="btn-primary" style="text-decoration:none; display:flex; align-items:center; gap:6px; padding:6px 14px; font-size:0.8rem;">
+                    <i data-lucide="bot" style="width:14px; height:14px;"></i> Ask AI
+                </a>
+            </div>
+        </div>
+
+        <iframe id="pdf-viewer-frame" class="pdf-frame" src="about:blank"></iframe>
+    </div>
+
+    <script src="./js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const user = await requireAuth();
+            if (!user) return;
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const docId = urlParams.get('id');
+
+            if (!docId) {
+                alert('No document specified');
+                window.location.href = 'documents.html';
+                return;
+            }
+
+            const downloadUrl = `${API_URL}/documents/${docId}/file`;
+            document.getElementById('btn-download').href = downloadUrl;
+            document.getElementById('pdf-viewer-frame').src = downloadUrl;
+
+            // Fetch metadata to set title
+            try {
+                const res = await apiFetch(`/documents/library`);
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const doc = data.data.find(d => d.id === docId);
+                    if (doc) {
+                        document.getElementById('doc-title').textContent = doc.title || doc.original_filename;
+                    } else {
+                        document.getElementById('doc-title').textContent = 'Document Viewer';
+                    }
+                }
+            } catch(e) {
+                document.getElementById('doc-title').textContent = 'Document Viewer';
+            }
+
+            if (window.lucide) lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
+

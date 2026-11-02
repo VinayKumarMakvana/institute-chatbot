@@ -47,6 +47,11 @@ async def register(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
         email=new_user.email,
         name=new_user.name,
         role=new_user.role,
+        roll_number=new_user.roll_number,
+        department=new_user.department,
+        course=new_user.course,
+        semester=new_user.semester,
+        mobile_number=new_user.mobile_number,
         is_active=new_user.is_active,
         created_at=new_user.created_at
     )
@@ -72,7 +77,8 @@ def get_login_rate_limit(request: Request):
         del login_attempts[ip]
         
     attempts = [t for t in login_attempts.get(client_ip, []) if now - t < 60]
-    if len(attempts) >= 10:
+    limit = 60 if settings.APP_ENV == "development" else 10
+    if len(attempts) >= limit:
         raise HTTPException(status_code=429, detail="Too many login attempts. Please try again later.")
     attempts.append(now)
     login_attempts[client_ip] = attempts
@@ -123,6 +129,11 @@ async def login(request: Request, user_in: UserLogin, db: AsyncSession = Depends
         email=user.email,
         name=user.name,
         role=user.role,
+        roll_number=user.roll_number,
+        department=user.department,
+        course=user.course,
+        semester=user.semester,
+        mobile_number=user.mobile_number,
         is_active=user.is_active,
         created_at=user.created_at,
         last_login_at=now
@@ -139,7 +150,7 @@ async def admin_login(request: Request, user_in: UserLogin):
     get_login_rate_limit(request)
     email = user_in.email.lower()
     
-    if email != settings.ADMIN_EMAIL.lower():
+    if email != settings.ADMIN_EMAIL.lower() or not verify_password(user_in.password, settings.ADMIN_PASSWORD_HASH):
         raise HTTPException(status_code=401, detail="Incorrect email or password")
         
     access_token = create_access_token(data={"sub": settings.ADMIN_EMAIL, "role": "ADMIN"})
@@ -159,6 +170,92 @@ async def admin_login(request: Request, user_in: UserLogin):
         message="Admin login successful",
         data={"user": admin_resp, "token": access_token}
     )
+
+from pydantic import BaseModel
+from typing import Optional
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str
+
+class UpdateProfileRequest(BaseModel):
+    name: Optional[str] = None
+    mobile_number: Optional[str] = None
+    department: Optional[str] = None
+    course: Optional[str] = None
+    semester: Optional[str] = None
+    roll_number: Optional[str] = None
+
+@router.put("/profile", response_model=StandardResponse[UserResponse])
+async def update_profile(
+    profile_in: UpdateProfileRequest,
+    current_user: UserResponse = Depends(deps.get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if current_user.role == "ADMIN":
+        return StandardResponse(success=True, message="Admin profile active.", data=current_user)
+
+    result = await db.execute(select(UserDB).where(UserDB.id == current_user.id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if profile_in.name is not None and profile_in.name.strip():
+        user.name = profile_in.name.strip()
+    if profile_in.mobile_number is not None:
+        user.mobile_number = profile_in.mobile_number.strip()
+    if profile_in.department is not None:
+        user.department = profile_in.department.strip()
+    if profile_in.course is not None:
+        user.course = profile_in.course.strip()
+    if profile_in.semester is not None:
+        user.semester = profile_in.semester.strip()
+    if profile_in.roll_number is not None:
+        user.roll_number = profile_in.roll_number.strip()
+
+    await db.commit()
+    await db.refresh(user)
+
+    updated_resp = UserResponse(
+        id=user.id,
+        email=user.email,
+        name=user.name,
+        role=user.role,
+        roll_number=user.roll_number,
+        department=user.department,
+        course=user.course,
+        semester=user.semester,
+        mobile_number=user.mobile_number,
+        is_active=user.is_active,
+        created_at=user.created_at,
+        last_login_at=user.last_login_at
+    )
+    return StandardResponse(success=True, message="Profile updated successfully.", data=updated_resp)
+
+@router.post("/change-password", response_model=StandardResponse[None])
+async def change_password(
+    pwd_in: ChangePasswordRequest,
+    current_user: UserResponse = Depends(deps.get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    if current_user.role == "ADMIN":
+        raise HTTPException(status_code=400, detail="Admin password is managed via environment configuration.")
+
+    if len(pwd_in.new_password) < 6:
+        raise HTTPException(status_code=400, detail="New password must be at least 6 characters.")
+
+    result = await db.execute(select(UserDB).where(UserDB.id == current_user.id))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if not verify_password(pwd_in.current_password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Current password is incorrect.")
+
+    user.hashed_password = get_password_hash(pwd_in.new_password)
+    await db.commit()
+
+    return StandardResponse(success=True, message="Password updated successfully.", data=None)
 
 @router.get("/me", response_model=StandardResponse[UserResponse])
 async def read_users_me(current_user: UserResponse = Depends(deps.get_current_user)):

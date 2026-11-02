@@ -4,18 +4,19 @@ from sqlalchemy import select, func, desc
 
 from app.db.sqlite import get_db
 from app.db.models import UserDB, DocumentDB, ChatDB, SavedAnswerDB, ChatMessageDB
+from app.models.user import UserResponse
 from app.api.v1.deps import get_current_user, require_admin
 
 router = APIRouter()
 
 @router.get("/stats")
 async def get_dashboard_stats(
+    current_admin: UserResponse = Depends(require_admin),
     db: AsyncSession = Depends(get_db),
-    # current_user = Depends(get_current_admin)  # Protect with admin auth
 ):
     # Total counts
     total_users = await db.scalar(select(func.count(UserDB.id)))
-    total_queries = await db.scalar(select(func.count(ChatMessageDB.id)).where(ChatMessageDB.role == 'user'))
+    total_queries = await db.scalar(select(func.count(ChatMessageDB.id)).where(ChatMessageDB.role.in_(['USER', 'user'])))
     total_pdfs = await db.scalar(select(func.count(DocumentDB.id)))
     saved_answers = await db.scalar(select(func.count(SavedAnswerDB.id)))
 
@@ -36,7 +37,7 @@ async def get_dashboard_stats(
 
     # Recent Queries
     recent_queries_result = await db.execute(
-        select(ChatMessageDB).where(ChatMessageDB.role == 'user').order_by(desc(ChatMessageDB.created_at)).limit(5)
+        select(ChatMessageDB).where(ChatMessageDB.role.in_(['USER', 'user'])).order_by(desc(ChatMessageDB.created_at)).limit(5)
     )
     recent_queries = recent_queries_result.scalars().all()
     recent_queries_list = [
@@ -67,7 +68,7 @@ async def get_dashboard_stats(
     # Analytics - Graph Data (last 7 days)
     seven_days_ago = datetime.utcnow() - timedelta(days=7)
     recent_all_queries = await db.execute(
-        select(ChatMessageDB).where(ChatMessageDB.role == 'user', ChatMessageDB.created_at >= seven_days_ago)
+        select(ChatMessageDB).where(ChatMessageDB.role.in_(['USER', 'user']), ChatMessageDB.created_at >= seven_days_ago)
     )
     all_qs = recent_all_queries.scalars().all()
     

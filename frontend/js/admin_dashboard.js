@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        const response = await fetch('http://localhost:8000/api/v1/dashboard/stats');
+        const response = await apiFetch('/dashboard/stats');
         const result = await response.json();
         
         if (result.success && result.data) {

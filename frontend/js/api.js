@@ -1,5 +1,12 @@
 // Centralized API configuration and token management
-const API_URL = 'http://127.0.0.1:8000/api/v1';
+// Auto-detect backend host: if custom window.API_BASE_URL is set, use it.
+// If running on local dev server on port 5500, point to port 8000.
+// If served directly from FastAPI or deployed with reverse proxy, use current origin + /api/v1.
+const API_URL = window.API_BASE_URL || (
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? (window.location.port === '5500' ? 'http://127.0.0.1:8000/api/v1' : `${window.location.origin}/api/v1`)
+        : `${window.location.origin}/api/v1`
+);
 
 // Global Page Transition Loader
 (function() {
@@ -41,10 +48,12 @@ function clearToken() {
 // Fetch Wrapper with automatic token injection
 async function apiFetch(endpoint, options = {}) {
     const token = getToken();
-    const headers = {
-        'Content-Type': 'application/json',
-        ...options.headers
-    };
+    const headers = { ...options.headers };
+
+    // Only set Content-Type if body is not FormData (FormData requires browser to set boundary)
+    if (!(options.body instanceof FormData) && !headers['Content-Type']) {
+        headers['Content-Type'] = 'application/json';
+    }
 
     if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -56,8 +65,8 @@ async function apiFetch(endpoint, options = {}) {
             headers
         });
         
-        // Handle unauthorized globally
-        if (response.status === 401 || response.status === 403) {
+        // Handle unauthorized globally (expired / invalid token)
+        if (response.status === 401) {
             clearToken();
             if (!window.location.pathname.endsWith('login.html') && !window.location.pathname.endsWith('register.html')) {
                 window.location.href = 'login.html';
@@ -126,6 +135,29 @@ async function requireAuth(requiredRole = null) {
             if(document.getElementById('nav-role')) document.getElementById('nav-role').textContent = user.role === 'ADMIN' ? 'Super Admin' : (user.role === 'FACULTY' ? 'Faculty' : 'Student');
         }
 
+        // Live unread notification badge
+        const badgeEl = document.getElementById('nav-badge-count');
+        const bnavBadge = document.getElementById('bnav-badge');
+        if ((badgeEl || bnavBadge) && user.role !== 'ADMIN') {
+            try {
+                const nRes = await fetch(`${API_URL}/notifications/unread-count`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (nRes.ok) {
+                    const nData = await nRes.json();
+                    const unread = nData.data?.unread_count || 0;
+                    if (badgeEl) {
+                        badgeEl.textContent = unread;
+                        badgeEl.style.display = unread > 0 ? 'inline-flex' : 'none';
+                    }
+                    if (bnavBadge) {
+                        bnavBadge.textContent = unread;
+                        bnavBadge.style.display = unread > 0 ? 'inline-flex' : 'none';
+                    }
+                }
+            } catch(e) {}
+        }
+
         // Hide global loader after a short delay to allow subsequent page fetches to complete
         setTimeout(() => {
             const loader = document.getElementById('global-page-loader');
@@ -180,3 +212,4 @@ function setupLogout() {
         });
     });
 }
+document.addEventListener('DOMContentLoaded', setupLogout);

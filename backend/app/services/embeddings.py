@@ -25,10 +25,11 @@ class EmbeddingService:
             
         elif self.provider == "gemini" and self.client:
             try:
-                # Wrap in sync wrapper or run in executor if necessary
+                from google.genai import types
                 response = self.client.models.embed_content(
                     model=self.model,
-                    contents=texts
+                    contents=texts,
+                    config=types.EmbedContentConfig(output_dimensionality=self.dimension)
                 )
                 if isinstance(response.embeddings, list):
                     return [emb.values for emb in response.embeddings]

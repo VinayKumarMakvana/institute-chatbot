@@ -6,8 +6,15 @@ from app.core.config import settings
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     if isinstance(hashed_password, str):
-        hashed_password = hashed_password.encode('utf-8')
-    return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password)
+        hashed_bytes = hashed_password.encode('utf-8')
+    else:
+        hashed_bytes = hashed_password
+    try:
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_bytes)
+    except ValueError:
+        # Graceful fallback in case plain text password was configured in .env
+        raw = hashed_password if isinstance(hashed_password, str) else hashed_bytes.decode('utf-8')
+        return plain_password == raw
 
 def get_password_hash(password: str) -> str:
     salt = bcrypt.gensalt()

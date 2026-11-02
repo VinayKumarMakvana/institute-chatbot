@@ -5,6 +5,6 @@ T = TypeVar("T")
 
 class StandardResponse(BaseModel, Generic[T]):
     success: bool
-    message: str
+    message: Optional[str] = ""
     data: Optional[T] = None
     error_code: Optional[str] = None

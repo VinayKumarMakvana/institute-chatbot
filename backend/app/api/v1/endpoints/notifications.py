@@ -47,7 +47,7 @@ async def get_unread_count(current_user: UserResponse = Depends(deps.get_current
         .where(NotificationDB.user_id == current_user.id, NotificationDB.is_read == False)
     )
     count = len(result.scalars().all())
-    return StandardResponse(success=True, message="Unread count retrieved", data=UnreadCountResponse(unread_count=count))
+    return StandardResponse(success=True, message="Unread count retrieved", data=UnreadCountResponse(count=count, unread_count=count))
 
 @router.post("/{notification_id}/read", response_model=StandardResponse[None])
 async def mark_read(notification_id: str, current_user: UserResponse = Depends(deps.get_current_user), db: AsyncSession = Depends(get_db)):

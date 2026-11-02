@@ -23,26 +23,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     const labelColStyle = `display:flex; align-items:center; gap:6px; color:#9ca3af;`;
     const valColStyle = `color:#fff; line-height: 1.4;`;
 
-    // Mock data based on user
+    // Real data based on authenticated user
+    const regDate = user.created_at ? new Date(user.created_at).toLocaleDateString('en-GB', {day: 'numeric', month: 'short', year: 'numeric'}) : 'Recently';
+    const lastLogin = user.last_login_at ? new Date(user.last_login_at).toLocaleString('en-GB', {day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute:'2-digit'}) : 'Active Now';
     const profileData = {
-        name: user.name,
-        role: user.role,
-        email: user.email,
-        username: user.email.split('@')[0],
-        memberSince: "10 Sep 2026",
-        regDate: "10 Sep 2026, 11:24 AM",
-        lastLogin: "3 Oct 2026, 6:45 PM",
+        name: user.name || 'Student',
+        role: user.role === 'ADMIN' ? 'Super Admin' : (user.role === 'FACULTY' ? 'Faculty' : 'Student'),
+        email: user.email || '',
+        username: (user.email || '').split('@')[0],
+        memberSince: regDate,
+        regDate: regDate,
+        lastLogin: lastLogin,
         dob: "2007-03-24",
         gender: "Male",
-        mobile: "+91 98765 43210",
+        mobile: user.mobile_number || '+91 98765 43210',
         location: "Kota, Rajasthan, India",
-        bio: "BCA student | Aspiring Full-Stack Developer | Interested in AI, Web Development and Technology.",
-        course: "Bachelor of Computer Applications (BCA)",
-        semester: "2nd Semester",
-        enrollment: "BCA2026XXXX",
-        dept: "Computer Applications",
+        bio: `${user.course || 'BCA'} student | Aspiring Developer | Interested in AI and Technology.`,
+        course: user.course || 'Bachelor of Computer Applications (BCA)',
+        semester: user.semester || '2nd Semester',
+        enrollment: user.roll_number || 'BCA2026001',
+        dept: user.department || 'Computer Science & Applications',
         session: "2026 - 2029",
-        institute: "Institution Name (e.g. MCU)"
+        institute: "Institution AI Portal"
     };
 
     let currentEditTab = 'basic';
@@ -374,7 +376,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <!-- Footer Actions -->
                     <div style="display:flex; justify-content:flex-end; gap:12px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 16px;">
                         <button onclick="document.getElementById('btn-view-mode').click()" style="background:transparent; border:1px solid rgba(255,255,255,0.1); color:#e5e7eb; padding:8px 16px; border-radius:6px; font-size:0.8rem; cursor:pointer;">Cancel</button>
-                        <button style="background:#00D261; border:none; color:#041209; padding:8px 20px; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer; display:flex; gap:6px; align-items:center;"><i data-lucide="save" style="width:16px; height:16px;"></i> Save Changes</button>
+                        <button id="btn-save-profile" style="background:#00D261; border:none; color:#041209; padding:8px 20px; border-radius:6px; font-size:0.85rem; font-weight:600; cursor:pointer; display:flex; gap:6px; align-items:center;"><i data-lucide="save" style="width:16px; height:16px;"></i> Save Changes</button>
                     </div>
 
                 </div>
@@ -385,7 +387,95 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.head.insertAdjacentHTML('beforeend', '<style id="compact-focus-style">input:focus, select:focus, textarea:focus { border-color: #00D261 !important; }</style>');
         }
 
+        const saveBtn = document.getElementById('btn-save-profile');
+        if (saveBtn) saveBtn.addEventListener('click', saveProfile);
+        
+        const updatePwdBtn = document.getElementById('btn-update-pwd');
+        if (updatePwdBtn) updatePwdBtn.addEventListener('click', updatePassword);
+
         if (window.lucide) window.lucide.createIcons({root: container});
+    }
+
+    async function saveProfile() {
+        const nameInput = document.getElementById('edit-name');
+        const mobileInput = document.getElementById('edit-mobile');
+        const courseInput = document.getElementById('edit-course');
+        const semInput = document.getElementById('edit-semester');
+        const deptInput = document.getElementById('edit-dept');
+        const rollInput = document.getElementById('edit-roll');
+
+        const payload = {};
+        if (nameInput) payload.name = nameInput.value.trim();
+        if (mobileInput) payload.mobile_number = mobileInput.value.trim();
+        if (courseInput) payload.course = courseInput.value.trim();
+        if (semInput) payload.semester = semInput.value.trim();
+        if (deptInput) payload.department = deptInput.value.trim();
+        if (rollInput) payload.roll_number = rollInput.value.trim();
+
+        try {
+            const res = await apiFetch('/auth/profile', {
+                method: 'PUT',
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Profile updated successfully!');
+                if (payload.name) {
+                    profileData.name = payload.name;
+                    document.getElementById('nav-name').textContent = payload.name;
+                }
+                if (payload.mobile_number) profileData.mobile = payload.mobile_number;
+                if (payload.course) profileData.course = payload.course;
+                if (payload.semester) profileData.semester = payload.semester;
+                if (payload.department) profileData.dept = payload.department;
+                if (payload.roll_number) profileData.enrollment = payload.roll_number;
+                renderViewMode();
+            } else {
+                alert('Failed to update profile: ' + (data.message || 'Unknown error'));
+            }
+        } catch(e) {
+            console.error(e);
+            alert('Error updating profile');
+        }
+    }
+
+    async function updatePassword() {
+        const cur = document.getElementById('pwd-current')?.value;
+        const nw = document.getElementById('pwd-new')?.value;
+        const cf = document.getElementById('pwd-confirm')?.value;
+
+        if (!cur || !nw) {
+            alert('Please enter current and new passwords.');
+            return;
+        }
+        if (nw !== cf) {
+            alert('New passwords do not match.');
+            return;
+        }
+        if (nw.length < 6) {
+            alert('New password must be at least 6 characters.');
+            return;
+        }
+
+        try {
+            const res = await apiFetch('/auth/change-password', {
+                method: 'POST',
+                body: JSON.stringify({ current_password: cur, new_password: nw })
+            });
+            const data = await res.json();
+            if (data.success) {
+                alert('Password updated successfully!');
+                document.getElementById('pwd-current').value = '';
+                document.getElementById('pwd-new').value = '';
+                document.getElementById('pwd-confirm').value = '';
+                renderViewMode();
+            } else {
+                alert('Error: ' + (data.detail || data.message || 'Incorrect current password'));
+            }
+        } catch(e) {
+            console.error(e);
+            alert('Failed to update password');
+        }
     }
 
     renderViewMode();
