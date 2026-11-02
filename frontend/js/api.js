@@ -1,11 +1,18 @@
 // Centralized API configuration and token management
-// Auto-detect backend host: if custom window.API_BASE_URL is set, use it.
-// If running on local dev server on port 5500, point to port 8000.
-// If served directly from FastAPI or deployed with reverse proxy, use current origin + /api/v1.
+// =========================================================================
+// 🚀 PRODUCTION RENDER BACKEND URL:
+// Jab aap Render par apna backend deploy karenge, tab Render aapko ek URL dega
+// (jaise: 'https://institute-chatbot-xxxx.onrender.com').
+// Agar aap Frontend Vercel par deploy kar rahe hain, to niche Render ka URL daal dein:
+// =========================================================================
+const RENDER_BACKEND_URL = ''; // Example: 'https://institute-chatbot-api.onrender.com/api/v1'
+
 const API_URL = window.API_BASE_URL || (
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-        ? (window.location.port === '5500' ? 'http://127.0.0.1:8000/api/v1' : `${window.location.origin}/api/v1`)
-        : `${window.location.origin}/api/v1`
+    RENDER_BACKEND_URL ? RENDER_BACKEND_URL : (
+        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+            ? (window.location.port === '5500' ? 'http://127.0.0.1:8000/api/v1' : `${window.location.origin}/api/v1`)
+            : `${window.location.origin}/api/v1`
+    )
 );
 
 // Global Page Transition Loader
