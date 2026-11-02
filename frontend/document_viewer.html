@@ -93,7 +93,8 @@
                 return;
             }
 
-            const downloadUrl = `${API_URL}/documents/${docId}/file`;
+            const token = getToken();
+            const downloadUrl = `${API_URL}/documents/${docId}/file${token ? `?token=${encodeURIComponent(token)}` : ''}`;
             document.getElementById('btn-download').href = downloadUrl;
             document.getElementById('pdf-viewer-frame').src = downloadUrl;
 

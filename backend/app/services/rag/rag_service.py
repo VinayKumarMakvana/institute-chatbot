@@ -8,10 +8,18 @@ from app.services.rag.llm_provider import llm_provider
 from app.services.holiday_service import holiday_service
 from app.models.chat import ChatResponse, SourceReference
 
+from typing import Optional, List, Dict, Any
+
 logger = logging.getLogger(__name__)
 
 class RAGService:
-    async def ask(self, query: str, db: AsyncSession) -> ChatResponse:
+    async def ask(
+        self,
+        query: str,
+        db: AsyncSession,
+        conversation_history: Optional[List[Dict[str, str]]] = None,
+        user_profile: Optional[Dict[str, Any]] = None
+    ) -> ChatResponse:
         # 1. Detect language (guaranteed to be 'hindi', 'hinglish', or 'english')
         lang_info = language_detector.detect(query)
         lang_code = lang_info.get("language_code", "english")
@@ -35,8 +43,15 @@ class RAGService:
         # 4. Build context from retrieved chunks
         context_str = context_builder.build(candidates) if candidates else ""
         
-        # 5. Build prompt with GPT-like assistance + strict language rules + holiday intelligence
-        prompt_data = prompt_builder.build(query, context_str, lang_code, holiday_intel=holiday_intel)
+        # 5. Build prompt with GPT-like assistance + multi-turn history + student profile + holiday intelligence
+        prompt_data = prompt_builder.build(
+            query=query,
+            context=context_str,
+            language_code=lang_code,
+            holiday_intel=holiday_intel,
+            conversation_history=conversation_history,
+            user_profile=user_profile
+        )
         
         # 6. Generate Answer via Gemini
         try:

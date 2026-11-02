@@ -67,9 +67,36 @@ async def chat_endpoint(
     )
     db.add(user_msg)
     await db.commit()
+    await db.refresh(user_msg)
         
     try:
-        rag_res = await rag_service.ask(request.message.strip(), db)
+        # Fetch previous conversation turns for this thread
+        history_res = await db.execute(
+            select(ChatMessageDB)
+            .where(ChatMessageDB.chat_id == chat_id, ChatMessageDB.id != user_msg.id)
+            .order_by(ChatMessageDB.created_at.desc())
+            .limit(6)
+        )
+        prev_messages = list(reversed(history_res.scalars().all()))
+        conversation_history = [
+            {"role": m.role.lower(), "content": m.content}
+            for m in prev_messages
+        ]
+        
+        user_profile = {
+            "name": getattr(current_user, "name", "Student"),
+            "email": getattr(current_user, "email", ""),
+            "course": getattr(current_user, "course", None),
+            "semester": getattr(current_user, "semester", None),
+            "department": getattr(current_user, "department", None)
+        }
+
+        rag_res = await rag_service.ask(
+            query=request.message.strip(),
+            db=db,
+            conversation_history=conversation_history,
+            user_profile=user_profile
+        )
         
         ast_now = utc_now()
         ast_msg = ChatMessageDB(

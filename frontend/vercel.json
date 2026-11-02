@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "cleanUrls": false,
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -11,5 +11,22 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/register", "destination": "/register.html" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin_chatbot", "destination": "/admin_chatbot.html" },
+    { "source": "/admin_documents", "destination": "/admin_documents.html" },
+    { "source": "/admin_live_updates", "destination": "/admin_live_updates.html" },
+    { "source": "/admin_settings", "destination": "/admin_settings.html" },
+    { "source": "/admin_users", "destination": "/admin_users.html" },
+    { "source": "/chat_history", "destination": "/chat_history.html" },
+    { "source": "/documents", "destination": "/documents.html" },
+    { "source": "/document_viewer", "destination": "/document_viewer.html" },
+    { "source": "/live_updates", "destination": "/live_updates.html" },
+    { "source": "/notifications", "destination": "/notifications.html" },
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/saved_answers", "destination": "/saved_answers.html" }
   ]
 }

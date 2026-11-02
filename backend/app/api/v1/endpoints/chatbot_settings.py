@@ -11,6 +11,7 @@ from app.models.user import UserResponse
 
 router = APIRouter()
 
+@router.get("", response_model=StandardResponse)
 @router.get("/", response_model=StandardResponse)
 async def get_chatbot_settings(
     db: Session = Depends(get_db),
@@ -27,6 +28,7 @@ async def get_chatbot_settings(
         
     return StandardResponse(success=True, data=settings)
 
+@router.put("", response_model=StandardResponse)
 @router.put("/", response_model=StandardResponse)
 async def update_chatbot_settings(
     settings_in: ChatbotSettingsUpdate,

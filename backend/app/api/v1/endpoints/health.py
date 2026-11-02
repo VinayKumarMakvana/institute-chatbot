@@ -6,6 +6,7 @@ from app.db.sqlite import get_db
 
 router = APIRouter()
 
+@router.get("", response_model=StandardResponse)
 @router.get("/", response_model=StandardResponse)
 async def health_check(db: AsyncSession = Depends(get_db)):
     db_status = "disconnected"

@@ -1,8 +1,8 @@
 import os
 import shutil
 import uuid
-from typing import List
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks, Query, Header
 from fastapi.responses import FileResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -111,15 +111,30 @@ async def get_document(document_id: str, current_admin: UserResponse = Depends(d
 @router.get("/{document_id}/file")
 async def get_document_file(
     document_id: str,
-    current_user: UserResponse = Depends(deps.get_current_user),
+    token: Optional[str] = Query(None),
+    authorization: Optional[str] = Header(None),
     db: AsyncSession = Depends(get_db)
 ):
+    from app.core.security import decode_access_token
+    
+    jwt_token = token
+    if not jwt_token and authorization and authorization.startswith("Bearer "):
+        jwt_token = authorization.split(" ")[1]
+        
+    user_payload = None
+    if jwt_token:
+        try:
+            user_payload = decode_access_token(jwt_token)
+        except Exception:
+            pass
+
     result = await db.execute(select(DocumentDB).where(DocumentDB.id == document_id))
     doc = result.scalar_one_or_none()
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
         
-    if current_user.role != "ADMIN" and doc.status != "READY":
+    user_role = user_payload.get("role") if user_payload else None
+    if doc.status != "READY" and user_role != "ADMIN":
         raise HTTPException(status_code=403, detail="Document is not ready for viewing")
         
     if not os.path.exists(doc.file_path):

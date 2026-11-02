@@ -42,6 +42,7 @@ origins = list(set([
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins if settings.APP_ENV == "production" and settings.FRONTEND_URL != "*" else ["*"],
+    allow_origin_regex=r"https://.*\.vercel\.app|https://.*\.onrender\.com",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
