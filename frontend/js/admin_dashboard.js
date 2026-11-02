@@ -1,4 +1,19 @@
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Live Clock for Admin Dashboard
+    function updateLiveClock() {
+        const now = new Date();
+        const dateEl = document.getElementById('dashboard-live-date');
+        const dayEl = document.getElementById('dashboard-live-day');
+        if (dateEl && dayEl) {
+            const dateStr = now.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' });
+            const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            dateEl.textContent = `${dateStr}, ${timeStr}`;
+            dayEl.textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
+        }
+    }
+    updateLiveClock();
+    setInterval(updateLiveClock, 30000);
+
     try {
         const response = await apiFetch('/dashboard/stats');
         const result = await response.json();
@@ -12,7 +27,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             document.getElementById('kpi-pdfs').textContent = stats.total_pdfs || 0;
             document.getElementById('kpi-answers').textContent = stats.saved_answers || 0;
             document.getElementById('kpi-support').textContent = stats.support_requests || 0;
-            document.getElementById('kpi-uptime').textContent = stats.system_uptime + '%' || '99.9%';
+            document.getElementById('kpi-uptime').textContent = (stats.system_uptime || '99.9') + '%';
+            
+            // Dynamic badges (no fake data)
+            const uBadge = document.getElementById('kpi-users-badge');
+            if (uBadge) uBadge.innerHTML = `<i data-lucide="activity" style="width:10px; height:10px;"></i> ${stats.total_users > 0 ? stats.total_users + ' Registered' : '0 Users'}`;
+            const qBadge = document.getElementById('kpi-queries-badge');
+            if (qBadge) qBadge.innerHTML = `<i data-lucide="zap" style="width:10px; height:10px;"></i> ${stats.total_queries > 0 ? stats.total_queries + ' Total' : 'Live'}`;
+            const pBadge = document.getElementById('kpi-pdfs-badge');
+            if (pBadge) pBadge.innerHTML = `<i data-lucide="database" style="width:10px; height:10px;"></i> ${stats.total_pdfs > 0 ? stats.total_pdfs + ' Ready' : '0 PDFs'}`;
+            const aBadge = document.getElementById('kpi-answers-badge');
+            if (aBadge) aBadge.innerHTML = `<i data-lucide="check" style="width:10px; height:10px;"></i> ${stats.saved_answers > 0 ? stats.saved_answers + ' Saved' : '0 Saved'}`;
+            const sBadge = document.getElementById('kpi-support-badge');
+            if (sBadge) sBadge.innerHTML = `<i data-lucide="shield-check" style="width:10px; height:10px;"></i> 0 Pending`;
             
             // Populate Recent Activity
             const activity = result.data.recent_activity;

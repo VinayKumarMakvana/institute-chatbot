@@ -59,7 +59,25 @@ function updateKPIs() {
     document.getElementById('kpi-admins').textContent = admins.toLocaleString();
     document.getElementById('kpi-inactive').textContent = inactive.toLocaleString();
     
+    // Dynamic real percentages (no fake data)
+    const stPct = total > 0 ? ((students / total) * 100).toFixed(1) + '%' : '0%';
+    const facPct = total > 0 ? ((faculty / total) * 100).toFixed(1) + '%' : '0%';
+    const admPct = total > 0 ? ((admins / total) * 100).toFixed(1) + '%' : '0%';
+    const inactPct = total > 0 ? ((inactive / total) * 100).toFixed(1) + '%' : '0%';
+    
+    const pctTotalEl = document.getElementById('kpi-pct-total');
+    if (pctTotalEl) pctTotalEl.innerHTML = `<i data-lucide="users" style="width: 12px; height: 12px;"></i> ${total > 0 ? total + ' Total' : '0 Users'}`;
+    const pctStEl = document.getElementById('kpi-pct-students');
+    if (pctStEl) pctStEl.innerHTML = `<i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> ${stPct}`;
+    const pctFacEl = document.getElementById('kpi-pct-faculty');
+    if (pctFacEl) pctFacEl.innerHTML = `<i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> ${facPct}`;
+    const pctAdmEl = document.getElementById('kpi-pct-admins');
+    if (pctAdmEl) pctAdmEl.innerHTML = `<i data-lucide="check-circle-2" style="width: 12px; height: 12px;"></i> ${admPct}`;
+    const pctInactEl = document.getElementById('kpi-pct-inactive');
+    if (pctInactEl) pctInactEl.innerHTML = `<i data-lucide="arrow-down-right" style="width: 12px; height: 12px;"></i> ${inactPct}`;
+    
     document.getElementById('pag-total').textContent = total.toLocaleString();
+    if (window.lucide) window.lucide.createIcons();
 }
 
 function renderUsers(users) {

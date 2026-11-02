@@ -98,11 +98,11 @@
                     <div style="display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 8px;">
                         <i data-lucide="calendar" style="color: #9ca3af; width: 20px; height: 20px;"></i>
                         <div>
-                            <div style="color: #fff; font-size: 0.85rem; font-weight: 500;">3 Oct 2026, 07:35 PM</div>
-                            <div style="color: #9ca3af; font-size: 0.75rem;">Saturday</div>
+                            <div id="dashboard-live-date" style="color: #fff; font-size: 0.85rem; font-weight: 500;">Live Date</div>
+                            <div id="dashboard-live-day" style="color: #9ca3af; font-size: 0.75rem;">Today</div>
                         </div>
                     </div>
-                    <button class="btn-primary" style="width: auto;">
+                    <button class="btn-primary" style="width: auto;" onclick="window.open('index.html', '_blank')">
                         View Live Site <i data-lucide="arrow-up-right" style="width: 14px; height: 14px;"></i>
                     </button>
                 </div>
@@ -115,8 +115,8 @@
                     <div style="background: #3b82f6; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="users"></i></div>
                     <div style="display: flex; flex-direction: column;">
                         <span style="font-size: 0.7rem; color: #9ca3af;">Total Users</span>
-                        <span id="kpi-users" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
-                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +12% this month</span>
+                        <span id="kpi-users" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">0</span>
+                        <span id="kpi-users-badge" style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="activity" style="width:10px; height:10px;"></i> Verified</span>
                     </div>
                 </div>
                 <!-- Total Queries -->
@@ -124,8 +124,8 @@
                     <div style="background: #10b981; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="message-square"></i></div>
                     <div style="display: flex; flex-direction: column;">
                         <span style="font-size: 0.7rem; color: #9ca3af;">Total Queries</span>
-                        <span id="kpi-queries" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
-                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +18% this month</span>
+                        <span id="kpi-queries" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">0</span>
+                        <span id="kpi-queries-badge" style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="zap" style="width:10px; height:10px;"></i> Real-time</span>
                     </div>
                 </div>
                 <!-- Total PDFs -->
@@ -133,8 +133,8 @@
                     <div style="background: #8b5cf6; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="file-text"></i></div>
                     <div style="display: flex; flex-direction: column;">
                         <span style="font-size: 0.7rem; color: #9ca3af;">Total PDFs</span>
-                        <span id="kpi-pdfs" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
-                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +5% this month</span>
+                        <span id="kpi-pdfs" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">0</span>
+                        <span id="kpi-pdfs-badge" style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="database" style="width:10px; height:10px;"></i> Indexed</span>
                     </div>
                 </div>
                 <!-- Saved Answers -->
@@ -142,8 +142,8 @@
                     <div style="background: #f59e0b; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="bookmark"></i></div>
                     <div style="display: flex; flex-direction: column;">
                         <span style="font-size: 0.7rem; color: #9ca3af;">Saved Answers</span>
-                        <span id="kpi-answers" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
-                        <span style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-up-right" style="width:10px; height:10px;"></i> +22% this month</span>
+                        <span id="kpi-answers" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">0</span>
+                        <span id="kpi-answers-badge" style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="check" style="width:10px; height:10px;"></i> Saved</span>
                     </div>
                 </div>
                 <!-- Support Requests -->
@@ -151,8 +151,8 @@
                     <div style="background: #ef4444; color: #fff; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><i data-lucide="headphones"></i></div>
                     <div style="display: flex; flex-direction: column;">
                         <span style="font-size: 0.7rem; color: #9ca3af;">Support Requests</span>
-                        <span id="kpi-support" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">-</span>
-                        <span style="font-size: 0.65rem; color: #ef4444; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="arrow-down-right" style="width:10px; height:10px;"></i> -8% (12 pending)</span>
+                        <span id="kpi-support" style="font-size: 1.3rem; font-weight: 700; color: #fff; line-height: 1.2;">0</span>
+                        <span id="kpi-support-badge" style="font-size: 0.65rem; color: #10b981; display: flex; align-items: center; gap: 2px; margin-top:2px;"><i data-lucide="shield-check" style="width:10px; height:10px;"></i> 0 Pending</span>
                     </div>
                 </div>
                 <!-- System Uptime -->

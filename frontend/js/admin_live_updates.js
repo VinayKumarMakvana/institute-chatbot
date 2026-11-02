@@ -21,8 +21,8 @@ function focusCreateForm() {
 }
 
 function updatePreview() {
-    const title = document.getElementById('form-title').value || 'Announcement Title';
-    const content = document.getElementById('form-content').value || 'Announcement content will appear here...';
+    const title = document.getElementById('form-title').value.trim() || 'Title preview...';
+    const content = document.getElementById('form-content').value.trim() || 'Type your announcement on the left to see live preview here.';
     const cat = document.getElementById('form-category').value;
     const aud = document.getElementById('form-audience').value;
     
