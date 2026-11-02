@@ -95,14 +95,14 @@ document.addEventListener('DOMContentLoaded', async () => {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        name: nameInput.value.trim(),
-                        email: emailInput.value.trim(),
-                        roll_number: rollInput.value.trim(),
-                        department: deptInput.value,
-                        course: courseInput.value,
-                        semester: semInput.value,
-                        mobile_number: phoneInput.value.trim(),
-                        password: passwordInput.value
+                        name: nameInput ? nameInput.value.trim() : '',
+                        email: emailInput ? emailInput.value.trim() : '',
+                        roll_number: rollInput ? rollInput.value.trim() : '',
+                        department: (deptInput && deptInput.value) ? deptInput.value : (courseInput ? courseInput.value : 'Computer Applications'),
+                        course: courseInput ? courseInput.value : 'BCA',
+                        semester: semInput ? semInput.value : '1st Semester',
+                        mobile_number: phoneInput ? phoneInput.value.trim() : '',
+                        password: passwordInput ? passwordInput.value : ''
                     })
                 });
                 
@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             } catch (err) {
                 console.error("Registration request failed:", err);
-                errorEl.textContent = 'Server connection failed. Is the backend running?';
+                errorEl.textContent = 'Connection error: ' + (err.message || 'Please check your internet or try again.');
                 errorEl.style.display = 'block';
             } finally {
                 submitBtn.disabled = false;

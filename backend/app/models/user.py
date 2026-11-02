@@ -17,7 +17,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     roll_number: str
-    department: str
+    department: Optional[str] = None
     course: str
     semester: str
     mobile_number: str
