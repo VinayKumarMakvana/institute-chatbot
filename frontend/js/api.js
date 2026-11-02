@@ -1,24 +1,26 @@
 // Centralized API configuration and token management
 // =========================================================================
 // 🚀 PRODUCTION RENDER BACKEND URL:
-// Jab aap Render par apna backend deploy karenge, tab Render aapko ek URL dega
-// (jaise: 'https://institute-chatbot-xxxx.onrender.com').
-// Agar aap Frontend Vercel par deploy kar rahe hain, to niche Render ka URL daal dein:
+// Render backend is connected here:
 // =========================================================================
-const RENDER_BACKEND_URL = ''; // Example: 'https://institute-chatbot-api.onrender.com/api/v1'
+const RENDER_BACKEND_URL = 'https://college-ai-assistant-kxzf.onrender.com/api/v1';
 
 const API_URL = window.API_BASE_URL || (
-    RENDER_BACKEND_URL ? RENDER_BACKEND_URL : (
-        (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-            ? (window.location.port === '5500' ? 'http://127.0.0.1:8000/api/v1' : `${window.location.origin}/api/v1`)
-            : `${window.location.origin}/api/v1`
-    )
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+        ? (window.location.port === '5500' ? 'http://127.0.0.1:8000/api/v1' : `${window.location.origin}/api/v1`)
+        : (RENDER_BACKEND_URL || `${window.location.origin}/api/v1`)
 );
+
+// Robust check for Auth pages (works on local file, .html, and Vercel clean URLs like /login, /register)
+function checkIsAuthPage() {
+    const p = (window.location.pathname || '').toLowerCase().replace(/\/$/, "");
+    return p.endsWith('login.html') || p.endsWith('/login') || p === '/login' || p === 'login' ||
+           p.endsWith('register.html') || p.endsWith('/register') || p === '/register' || p === 'register';
+}
 
 // Global Page Transition Loader
 (function() {
-    const isAuth = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('register.html');
-    if (!isAuth) {
+    if (!checkIsAuthPage()) {
         document.write(`
         <style>
             #global-page-loader {
@@ -38,6 +40,23 @@ const API_URL = window.API_BASE_URL || (
         `);
     }
 })();
+
+// Failsafe: Ensure loader is removed even if page-ready event is delayed
+document.addEventListener('DOMContentLoaded', () => {
+    if (checkIsAuthPage()) {
+        const loader = document.getElementById('global-page-loader');
+        if (loader) loader.remove();
+        document.body.classList.add('page-ready');
+    }
+    setTimeout(() => {
+        const loader = document.getElementById('global-page-loader');
+        if (loader) {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.remove(), 200);
+        }
+        document.body.classList.add('page-ready');
+    }, 1500);
+});
 
 // Token Management
 function getToken() {
@@ -75,7 +94,7 @@ async function apiFetch(endpoint, options = {}) {
         // Handle unauthorized globally (expired / invalid token)
         if (response.status === 401) {
             clearToken();
-            if (!window.location.pathname.endsWith('login.html') && !window.location.pathname.endsWith('register.html')) {
+            if (!checkIsAuthPage()) {
                 window.location.href = 'login.html';
             }
         }
@@ -90,10 +109,10 @@ async function apiFetch(endpoint, options = {}) {
 // Route Protection Logic
 async function requireAuth(requiredRole = null) {
     const token = getToken();
-    const isAuthPage = window.location.pathname.endsWith('login.html') || window.location.pathname.endsWith('register.html');
+    const isAuth = checkIsAuthPage();
     
     if (!token) {
-        if (!isAuthPage) {
+        if (!isAuth) {
             window.location.href = 'login.html';
         }
         return null;
@@ -103,7 +122,7 @@ async function requireAuth(requiredRole = null) {
         const res = await apiFetch('/auth/me');
         if (!res.ok) {
             clearToken();
-            if (!isAuthPage) window.location.href = 'login.html';
+            if (!isAuth) window.location.href = 'login.html';
             return null;
         }
 
@@ -111,18 +130,18 @@ async function requireAuth(requiredRole = null) {
         const user = data.data; // assuming { success: true, data: { role: 'ADMIN', ... } }
 
         const isAdminPage = window.location.pathname.includes('admin');
-        const isUserPage = !isAdminPage && !isAuthPage;
+        const isUserPage = !isAdminPage && !isAuth;
 
         // Strict App Separation
         if (user.role === 'ADMIN') {
             // Admins cannot access user pages or auth pages
-            if (isUserPage || isAuthPage) {
+            if (isUserPage || isAuth) {
                 window.location.replace('admin.html');
                 return null; // Stop execution
             }
         } else {
             // Users cannot access admin pages or auth pages
-            if (isAdminPage || isAuthPage) {
+            if (isAdminPage || isAuth) {
                 window.location.replace('index.html');
                 return null; // Stop execution
             }
@@ -181,7 +200,7 @@ async function requireAuth(requiredRole = null) {
         return user;
     } catch (e) {
         clearToken();
-        if (!isAuthPage) window.location.href = 'login.html';
+        if (!isAuth) window.location.href = 'login.html';
         return null;
     }
 }

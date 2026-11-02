@@ -2,9 +2,13 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
     // If we are on an auth page, redirect if already logged in
-    const currentPage = window.location.pathname.split('/').pop();
-    if (currentPage === 'login.html' || currentPage === 'register.html') {
-        await requireAuth();
+    const currentPage = (window.location.pathname || '').split('/').pop().toLowerCase().replace(/\/$/, "");
+    const isAuth = currentPage === 'login.html' || currentPage === 'login' || currentPage === 'register.html' || currentPage === 'register';
+    if (isAuth) {
+        const token = getToken();
+        if (token) {
+            await requireAuth();
+        }
     }
 
     // Single Login Handler
